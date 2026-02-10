@@ -11,7 +11,6 @@ class IgniterRenderer {
 
     private val paint = Paint().apply {
         style = Paint.Style.STROKE
-        strokeWidth = 10f // ~3dp roughly
         strokeCap = Paint.Cap.ROUND
         isAntiAlias = true
     }
@@ -80,6 +79,7 @@ class IgniterRenderer {
 
         paint.color = p.color
         paint.alpha = (p.life * 255).toInt().coerceIn(0, 255)
+        paint.strokeWidth = p.strokeWidth
 
         for (i in 0 until p.historyCount) {
              val histX = p.historyX[iterIndex]

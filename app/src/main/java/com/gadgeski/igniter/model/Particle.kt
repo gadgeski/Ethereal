@@ -13,23 +13,24 @@ class Particle {
     var dy: Float = 0f
     var color: Int = Color.CYAN
     var life: Float = 0f
+    var strokeWidth: Float = 0f
 
-    // History for trail effect (Ring Buffer concept could be used, but fixed array is simple)
-    // We'll store up to 10 past positions
-    val historyX = FloatArray(10)
-    val historyY = FloatArray(10)
+    // History for trail effect (Limit Break: 12 points)
+    val historyX = FloatArray(12)
+    val historyY = FloatArray(12)
     var historyIndex = 0
     var historyCount = 0
 
     var isActive: Boolean = false
 
-    fun reset(startX: Float, startY: Float, startDx: Float, startDy: Float, startColor: Int, startLife: Float) {
+    fun reset(startX: Float, startY: Float, startDx: Float, startDy: Float, startColor: Int, startLife: Float, startStrokeWidth: Float) {
         x = startX
         y = startY
         dx = startDx
         dy = startDy
         color = startColor
         life = startLife
+        strokeWidth = startStrokeWidth
         isActive = true
         
         // Reset history

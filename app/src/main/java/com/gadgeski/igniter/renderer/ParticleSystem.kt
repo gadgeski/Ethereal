@@ -9,14 +9,16 @@ import kotlin.random.Random
 class ParticleSystem {
 
     companion object {
-        private const val POOL_SIZE = 200
-        private const val EXPLOSION_COUNT = 30
-        private const val SPEED_MIN = 10f
-        private const val SPEED_MAX = 20f
+        // Limit Break Parameters
+        private const val POOL_SIZE = 1000
+        private const val EXPLOSION_COUNT = 50
+        private const val SPEED_MIN = 15f
+        private const val SPEED_MAX = 30f // Super fast
         
         // Colors from Design Rules
         private const val COLOR_CYAN = 0xFF00E5FF.toInt()
         private const val COLOR_MAGENTA = 0xFFD500F9.toInt()
+        private const val COLOR_WHITE = 0xFFFFFFFF.toInt()
     }
 
     // Fixed pool of particles
@@ -39,8 +41,17 @@ class ParticleSystem {
                 }
 
                 if (bounced) {
-                    // Randomly switch color on bounce
-                    p.color = if (Random.nextBoolean()) COLOR_CYAN else COLOR_MAGENTA
+                    // Randomly switch color on bounce (White stays White -> or maybe switch to standard?)
+                    // Let's keep White special, but standard particles switch.
+                    if (p.color != COLOR_WHITE) {
+                        p.color = if (Random.nextBoolean()) COLOR_CYAN else COLOR_MAGENTA
+                    }
+                }
+                
+                // Slower decay for longer trails
+                if (p.life > 0) {
+                     p.life -= 0.005f
+                     if (p.life <= 0) p.isActive = false
                 }
             }
         }
@@ -57,13 +68,17 @@ class ParticleSystem {
                 val dx = (cos(angle) * speed).toFloat()
                 val dy = (sin(angle) * speed).toFloat()
                 
-                // Random start color
-                val color = if (Random.nextBoolean()) COLOR_CYAN else COLOR_MAGENTA
+                // Rare Spark (5%)
+                val isRare = Random.nextDouble() < 0.05
+                val color = if (isRare) COLOR_WHITE else (if (Random.nextBoolean()) COLOR_CYAN else COLOR_MAGENTA)
+                
+                // Randomized Stroke Width (1dp ~ 4dp roughly)
+                val strokeWidth = Random.nextDouble(3.0, 12.0).toFloat()
                 
                 // Slightly randomized life
                 val life = Random.nextDouble(0.8, 1.0).toFloat()
 
-                particles[i].reset(startX, startY, dx, dy, color, life)
+                particles[i].reset(startX, startY, dx, dy, color, life, strokeWidth)
                 
                 spawned++
                 if (spawned >= EXPLOSION_COUNT) break
