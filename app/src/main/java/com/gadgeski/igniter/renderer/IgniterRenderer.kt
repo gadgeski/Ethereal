@@ -19,12 +19,15 @@ class IgniterRenderer {
     private val path = Path()
 
     private val particleSystem = ParticleSystem()
+    private val hexGridSystem = HexGridSystem()
+    
     private var surfaceWidth = 0
     private var surfaceHeight = 0
 
     fun setSurfaceSize(width: Int, height: Int) {
         surfaceWidth = width
         surfaceHeight = height
+        hexGridSystem.resize(width, height)
     }
 
     fun updateTouch(x: Float, y: Float) {
@@ -37,6 +40,9 @@ class IgniterRenderer {
 
         // Clear background
         canvas.drawColor(Color.BLACK)
+        
+        // Draw Background Grid
+        hexGridSystem.draw(canvas)
 
         // Draw particles
         val particles = particleSystem.particles
