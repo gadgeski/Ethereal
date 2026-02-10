@@ -13,7 +13,7 @@ class HexGridSystem {
     private val paint = Paint().apply {
         color = 0xFF00E5FF.toInt() // Cyan
         style = Paint.Style.STROKE
-        strokeWidth = 2f // ~1dp
+        strokeWidth = 6f // ~3dp
         isAntiAlias = true
     }
 
@@ -64,7 +64,7 @@ class HexGridSystem {
         // Pulse Effect
         val time = System.currentTimeMillis()
         val pulse = (sin(time / 1000.0) + 1) / 2 // 0.0 to 1.0
-        val alpha = (30 + (pulse * 70)).toInt() // 30 to 100 alpha
+        val alpha = (20 + (pulse * 40)).toInt() // 20 to 60 alpha
         
         paint.alpha = alpha
         canvas.drawPath(path, paint)
