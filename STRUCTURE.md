@@ -1,5 +1,5 @@
 ```
-Igniter/
+Ethereal/
 ├── AGENTS.md
 ├── Readme.md
 ├── STRUCTURE.md
@@ -11,23 +11,23 @@ Igniter/
 │       │   └── java
 │       │       └── com
 │       │           └── gadgeski
-│       │               └── igniter
+│       │               └── ethereal
 │       │                   └── ExampleInstrumentedTest.kt
 │       ├── main
 │       │   ├── AndroidManifest.xml
 │       │   ├── java
 │       │   │   └── com
 │       │   │       └── gadgeski
-│       │   │           └── igniter
-│       │   │               ├── IgniterApp.kt
-│       │   │               ├── IgniterWallpaperService.kt
+│       │   │           └── ethereal
+│       │   │               ├── EtherealApp.kt
+│       │   │               ├── EtherealWallpaperService.kt
 │       │   │               ├── MainActivity.kt
 │       │   │               ├── model
 │       │   │               │   └── Particle.kt
 │       │   │               ├── renderer
-│       │   │               │   ├── HexGridSystem.kt
-│       │   │               │   ├── IgniterRenderer.kt
-│       │   │               │   └── ParticleSystem.kt
+│       │   │               │   ├── EtherealRenderer.kt
+│       │   │               │   ├── ParticleSystem.kt
+│       │   │               │   └── SkySystem.kt
 │       │   │               └── ui
 │       │   │                   └── theme
 │       │   │                       ├── Color.kt
@@ -35,6 +35,7 @@ Igniter/
 │       │   │                       └── Type.kt
 │       │   └── res
 │       │       ├── drawable
+│       │       │   ├── ethereal_bg.png
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
 │       │       ├── mipmap-anydpi
@@ -67,7 +68,7 @@ Igniter/
 │           └── java
 │               └── com
 │                   └── gadgeski
-│                       └── igniter
+│                       └── ethereal
 │                           └── ExampleUnitTest.kt
 ├── build.gradle.kts
 ├── gradle
@@ -81,5 +82,5 @@ Igniter/
 ├── local.properties
 └── settings.gradle.kts
 
-34 directories, 47 files
+34 directories, 48 files
 ```
