@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name=".IgniterApp"
+        android:name=".EtherealApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -10,10 +10,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Igniter">
+        android:theme="@style/Theme.Ethereal">
 
         <service
-            android:name=".IgniterWallpaperService"
+            android:name=".EtherealWallpaperService"
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"
@@ -29,7 +29,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Igniter">
+            android:theme="@style/Theme.Ethereal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

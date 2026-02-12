@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Igniter"
+rootProject.name = "Ethereal"
 include(":app")

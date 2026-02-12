@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.gadgeski.igniter"
+    namespace = "com.gadgeski.ethereal"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.gadgeski.igniter"
+        applicationId = "com.gadgeski.ethereal"
         minSdk = 30
         targetSdk = 35
         versionCode = 1
