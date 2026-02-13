@@ -75,10 +75,27 @@ class SkySystem(context: Context) {
         // event.x, event.y を使ってインタラクションを実装する予定
     }
 
+    // パララックス用のオフセット (0.0 - 1.0)
+    private var xOffset: Float = 0f
+
+    fun setParallax(offset: Float) {
+        this.xOffset = offset
+    }
+
     fun draw(canvas: Canvas) {
-        bgBitmap?.let { bitmap ->
-            // 事前計算したマトリクスを使って高速に描画
-            canvas.drawBitmap(bitmap, bgMatrix, paint)
-        }
+        val bitmap = bgBitmap ?: return
+
+        canvas.save()
+        // 修正ポイント: パララックス効果 (Factor 0.1)
+        // 背景はゆっくり動く（遠景）
+        // widthが確定していない場合は0fになるが、通常drawはupdateSize後なので問題ない
+        val width = canvas.width.toFloat()
+        val translationX = -xOffset * width * 0.1f
+        canvas.translate(translationX, 0f)
+
+        // 事前計算したマトリクスを使って高速に描画
+        canvas.drawBitmap(bitmap, bgMatrix, paint)
+
+        canvas.restore()
     }
 }

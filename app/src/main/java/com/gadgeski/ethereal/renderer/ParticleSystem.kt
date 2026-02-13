@@ -1,6 +1,7 @@
 package com.gadgeski.ethereal.renderer
 
-// Particleクラスのパッケージパスは環境に合わせて確認してください
+import android.graphics.Canvas
+import android.graphics.Paint
 import com.gadgeski.ethereal.model.Particle
 import kotlin.math.cos
 import kotlin.math.sin
@@ -45,6 +46,41 @@ class ParticleSystem {
                     if (p.life <= 0) p.isActive = false
                 }
             }
+        }
+    }
+
+    // パララックス用のオフセット (0.0 - 1.0)
+    private var xOffset: Float = 0f
+
+    // パーティクル用のPaint (EtherealRendererから移動)
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+    }
+
+    fun setParallax(offset: Float) {
+        this.xOffset = offset
+    }
+
+    fun draw(canvas: Canvas) {
+        val width = canvas.width.toFloat()
+
+        for (p in particles) {
+            if (!p.isActive) continue
+
+            // 寿命(0.0~1.0)をアルファ値(0~255)に変換
+            val alpha = (p.life.coerceIn(0f, 1f) * 255f).toInt()
+
+            paint.color = p.color
+            paint.alpha = alpha
+
+            // strokeWidth を粒子の半径として使用
+            val radius = (p.strokeWidth * 0.5f).coerceAtLeast(1f)
+
+            // パララックス計算 (Factor 1.2)
+            // 手前の粒子は早く動く
+            val visualX = p.x - (xOffset * width * 1.2f)
+
+            canvas.drawCircle(visualX, p.y, radius, paint)
         }
     }
 

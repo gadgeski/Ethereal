@@ -2,7 +2,6 @@ package com.gadgeski.ethereal.renderer
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
@@ -29,15 +28,8 @@ class EtherealRenderer(private val context: Context) {
     // 霧のシステム（NEW）
     private val fogSystem = FogSystem()
 
-    // 光の粒子のシステム
+    // パーティクルのシステム
     private val particleSystem = ParticleSystem()
-
-    // パーティクル用のPaint
-    private val particlePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        // 光が発光しているように見せるため、白〜水色系にするのがオススメ
-        // ここではパーティクル個別の色を使う設定にします
-    }
 
     // 描画ループ
     private val drawRunner = object : Runnable {
@@ -98,11 +90,13 @@ class EtherealRenderer(private val context: Context) {
         this.isTouching = isTouching
     }
 
-    // 修正ポイント: パララックス実装待ちのため警告を抑制
+    // 修正ポイント: パララックス実装
     @Suppress("UNUSED_PARAMETER")
     fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {
-        // ホーム画面のスクロールに合わせて視差効果（パララックス）を入れる場合はここに記述
-        // 将来的に skySystem.setParallax(xOffset) のように使う予定
+        // ホーム画面のスクロールに合わせて視差効果（パララックス）を入れる
+        skySystem.setParallax(xOffset)
+        fogSystem.setParallax(xOffset)
+        particleSystem.setParallax(xOffset)
     }
 
     fun onTouchEvent(event: MotionEvent) {
@@ -148,7 +142,7 @@ class EtherealRenderer(private val context: Context) {
                 skySystem.draw(canvas)
 
                 // -------------------------------------------------
-                // 2. 霧（FogSystem）の更新と描画 (NEW)
+                // 2. 霧（FogSystem）の更新と描画
                 // -------------------------------------------------
                 fogSystem.update(screenWidth, screenHeight, touchX, touchY, isTouching)
                 fogSystem.draw(canvas)
@@ -159,21 +153,8 @@ class EtherealRenderer(private val context: Context) {
                 // 物理演算の更新
                 particleSystem.update(screenWidth, screenHeight)
 
-                // 描画ループ
-                for (p in particleSystem.particles) {
-                    if (!p.isActive) continue
-
-                    // 寿命(0.0~1.0)をアルファ値(0~255)に変換
-                    val alpha = (p.life.coerceIn(0f, 1f) * 255f).toInt()
-
-                    particlePaint.color = p.color
-                    particlePaint.alpha = alpha
-
-                    // strokeWidth を粒子の半径として使用
-                    val radius = (p.strokeWidth * 0.5f).coerceAtLeast(1f)
-
-                    canvas.drawCircle(p.x, p.y, radius, particlePaint)
-                }
+                // 描画 (ParticleSystemに移譲)
+                particleSystem.draw(canvas)
             }
         } catch (e: Exception) {
             e.printStackTrace()

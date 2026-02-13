@@ -98,15 +98,34 @@ class FogSystem {
         }
     }
 
+    // パララックス用のオフセット (0.0 - 1.0)
+    private var xOffset: Float = 0f
+
+    fun setParallax(offset: Float) {
+        this.xOffset = offset
+    }
+
     fun draw(canvas: Canvas) {
         val bitmap = cloudBitmap ?: return
+        val width = canvas.width.toFloat()
 
         fogParticles.forEach { p ->
             paint.alpha = p.alpha
 
+            // パララックス計算 (Factor 0.5)
+            // 霧は中景なので標準的な速度で動く
+            var visualX = p.x - (xOffset * width * 0.5f)
+            
+            // Wrap-around logic
+            // 画面の幅で割った余りを計算して、常に画面内に見えるようにする
+            // 負の値になった場合の調整
+            visualX %= width
+            if (visualX < 0) {
+                visualX += width
+            }
+
             // KTX: withTranslation, withScale を使用
-            // save() / restore() のブロック忘れを防げます
-            canvas.withTranslation(p.x, p.y) {
+            canvas.withTranslation(visualX, p.y) {
                 canvas.withScale(p.scale, p.scale) {
                     // 中心を基準に描画
                     canvas.drawBitmap(bitmap, -128f, -128f, paint)
