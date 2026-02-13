@@ -42,25 +42,5 @@ class Particle {
         }
     }
 
-    fun update() {
-        if (!isActive) return
 
-        // Save current position to history before updating
-        historyX[historyIndex] = x
-        historyY[historyIndex] = y
-        historyIndex = (historyIndex + 1) % historyX.size
-        if (historyCount < historyX.size) {
-            historyCount++
-        }
-
-        // Move
-        x += dx
-        y += dy
-
-        // Decay life
-        life -= 0.01f // Adjust decay rate as needed
-        if (life <= 0) {
-            isActive = false
-        }
-    }
 }

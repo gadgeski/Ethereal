@@ -59,15 +59,41 @@ class FogSystem {
         }
     }
 
-    fun update(width: Int, height: Int) {
+    fun update(width: Int, height: Int, touchX: Float, touchY: Float, isTouching: Boolean) {
         fogParticles.forEach { p ->
+            // 1. Basic movement
             p.x += p.speed
+            p.x += p.vx
+            p.y += p.vy
 
-            // 画面右端から完全に出たら、左端に戻す（ループ）
+            // 2. Repulsion logic
+            if (isTouching) {
+                val dx = p.x - touchX
+                val dy = p.y - touchY
+                val dist = kotlin.math.sqrt(dx * dx + dy * dy)
+                
+                // Interaction radius (e.g. 300px)
+                val radius = 300f 
+                
+                if (dist < radius && dist > 1f) {
+                    val force = (1.0f - dist / radius) * 1.5f // Strength of repulsion
+                    p.vx += (dx / dist) * force
+                    p.vy += (dy / dist) * force
+                }
+            }
+
+            // 3. Damping (friction)
+            p.vx *= 0.95f
+            p.vy *= 0.95f
+
+            // 4. Looping
             val margin = 200f * p.scale
             if (p.x > width + margin) {
                 p.x = -margin
                 p.y = Random.nextFloat() * height
+                // Reset velocity when respawning
+                p.vx = 0f
+                p.vy = 0f
             }
         }
     }
@@ -96,6 +122,10 @@ class FogSystem {
         var speed: Float = 0f
         var scale: Float = 1f
         var alpha: Int = 0
+        
+        // Velocity for physics integration
+        var vx: Float = 0f
+        var vy: Float = 0f
 
         // "Parameter 'w' is never used" を解消
         // X座標の初期化にも w を使うように変更
@@ -109,6 +139,9 @@ class FogSystem {
 
             // 薄い霧
             alpha = Random.nextInt(10, 40)
+            
+            vx = 0f
+            vy = 0f
         }
     }
 }

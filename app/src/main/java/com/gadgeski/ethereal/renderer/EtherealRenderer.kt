@@ -2,15 +2,12 @@ package com.gadgeski.ethereal.renderer
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import android.view.SurfaceHolder
-import com.gadgeski.ethereal.renderer.SkySystem
-import com.gadgeski.ethereal.renderer.ParticleSystem
-import com.gadgeski.ethereal.renderer.FogSystem
+
 
 class EtherealRenderer(private val context: Context) {
 
@@ -90,6 +87,17 @@ class EtherealRenderer(private val context: Context) {
         }
     }
 
+    // Touch state
+    private var touchX = 0f
+    private var touchY = 0f
+    private var isTouching = false
+
+    fun updateTouch(x: Float, y: Float, isTouching: Boolean) {
+        this.touchX = x
+        this.touchY = y
+        this.isTouching = isTouching
+    }
+
     // 修正ポイント: パララックス実装待ちのため警告を抑制
     @Suppress("UNUSED_PARAMETER")
     fun onOffsetsChanged(xOffset: Float, yOffset: Float, xOffsetStep: Float, yOffsetStep: Float, xPixelOffset: Int, yPixelOffset: Int) {
@@ -100,6 +108,13 @@ class EtherealRenderer(private val context: Context) {
     fun onTouchEvent(event: MotionEvent) {
         val x = event.x
         val y = event.y
+
+        // Update touch state for continuous interaction
+        if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
+            updateTouch(x, y, false)
+        } else {
+            updateTouch(x, y, true)
+        }
 
         // 空（雲）へのタッチ伝播
         skySystem.onTouch(event)
@@ -135,7 +150,7 @@ class EtherealRenderer(private val context: Context) {
                 // -------------------------------------------------
                 // 2. 霧（FogSystem）の更新と描画 (NEW)
                 // -------------------------------------------------
-                fogSystem.update(screenWidth, screenHeight)
+                fogSystem.update(screenWidth, screenHeight, touchX, touchY, isTouching)
                 fogSystem.draw(canvas)
 
                 // -------------------------------------------------
