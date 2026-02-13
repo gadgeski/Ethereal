@@ -26,6 +26,7 @@ Ethereal/
 │       │   │               │   └── Particle.kt
 │       │   │               ├── renderer
 │       │   │               │   ├── EtherealRenderer.kt
+│       │   │               │   ├── FogSystem.kt
 │       │   │               │   ├── ParticleSystem.kt
 │       │   │               │   └── SkySystem.kt
 │       │   │               └── ui
@@ -82,5 +83,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-34 directories, 48 files
+34 directories, 49 files
 ```
