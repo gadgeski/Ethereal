@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import com.gadgeski.ethereal.renderer.SkySystem
 import com.gadgeski.ethereal.renderer.ParticleSystem
+import com.gadgeski.ethereal.renderer.FogSystem
 
 class EtherealRenderer(private val context: Context) {
 
@@ -27,6 +28,9 @@ class EtherealRenderer(private val context: Context) {
 
     // 背景（空）のシステム
     private lateinit var skySystem: SkySystem
+
+    // 霧のシステム（NEW）
+    private val fogSystem = FogSystem()
 
     // 光の粒子のシステム
     private val particleSystem = ParticleSystem()
@@ -66,6 +70,7 @@ class EtherealRenderer(private val context: Context) {
 
         // 画面サイズが変わったらシステムに通知
         skySystem.updateSize(width, height)
+        fogSystem.updateSize(width, height) // 霧の再配置
         // particleSystem.updateSize(width, height) // 必要であれば実装
 
         draw() // サイズ変更時に一度強制描画
@@ -128,7 +133,13 @@ class EtherealRenderer(private val context: Context) {
                 skySystem.draw(canvas)
 
                 // -------------------------------------------------
-                // 2. パーティクルの更新と描画
+                // 2. 霧（FogSystem）の更新と描画 (NEW)
+                // -------------------------------------------------
+                fogSystem.update(screenWidth, screenHeight)
+                fogSystem.draw(canvas)
+
+                // -------------------------------------------------
+                // 3. パーティクルの更新と描画
                 // -------------------------------------------------
                 // 物理演算の更新
                 particleSystem.update(screenWidth, screenHeight)
