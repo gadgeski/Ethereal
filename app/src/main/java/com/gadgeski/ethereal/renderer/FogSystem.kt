@@ -112,9 +112,9 @@ class FogSystem {
         fogParticles.forEach { p ->
             paint.alpha = p.alpha
 
-            // パララックス計算 (Factor 0.5)
+            // パララックス計算 (Factor 0.6)
             // 霧は中景なので標準的な速度で動く
-            var visualX = p.x - (xOffset * width * 0.5f)
+            var visualX = p.x - (xOffset * width * 0.6f)
             
             // Wrap-around logic
             // 画面の幅で割った余りを計算して、常に画面内に見えるようにする
@@ -153,11 +153,12 @@ class FogSystem {
             y = Random.nextFloat() * h
 
             // 手前（大きく、速く）〜 奥（小さく、遅く）
-            scale = Random.nextFloat() * 2.5f + 1.5f
+            // サイズを大きくして視認性を向上
+            scale = Random.nextFloat() * 3.0f + 3.0f
             speed = Random.nextFloat() * 0.6f + 0.2f
 
-            // 薄い霧
-            alpha = Random.nextInt(10, 40)
+            // 霧の不透明度を上げて視認性を向上
+            alpha = Random.nextInt(30, 80)
             
             vx = 0f
             vy = 0f
