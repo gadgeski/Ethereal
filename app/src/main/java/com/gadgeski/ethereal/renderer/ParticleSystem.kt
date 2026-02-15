@@ -11,17 +11,18 @@ class ParticleSystem {
 
     companion object {
         // Ethereal (幽玄) なパラメータ
-        private const val POOL_SIZE = 2000      // 弾切れを防ぐため大幅増量
-        private const val BURST_COUNT = 40      // 一回のタップで出る量
+        private const val POOL_SIZE = 2000
+        // 一回のタップで出る量
+        private const val BURST_COUNT = 40
 
         // 速度：初速を速くして「弾ける」感覚を強化
         private const val SPEED_MIN = 3.0f
         private const val SPEED_MAX = 18.0f
 
         // Ethereal カラーパレット
-        private const val COLOR_GLOW_WHITE = 0xFFFFFFFF.toInt() // 発光
-        private const val COLOR_NEON_CYAN  = 0xFF00FFFF.toInt() // 強めのシアン
-        private const val COLOR_DEEP_BLUE  = 0xFF4400FF.toInt() // 深い青紫
+        private const val COLOR_GLOW_WHITE = 0xFFFFFFFF.toInt()
+        private const val COLOR_NEON_CYAN  = 0xFF00FFFF.toInt()
+        private const val COLOR_DEEP_BLUE  = 0xFF4400FF.toInt()
     }
 
     // 配列で事前確保
@@ -102,14 +103,13 @@ class ParticleSystem {
         // 座標変換: 画面座標 -> ワールド座標
         val parallaxShift = xOffset * currentWidth * parallaxFactor
         val worldX = touchX + parallaxShift
-        val worldY = touchY
 
         var spawnedCount = 0
 
         // 1. まず非アクティブなパーティクルを探して再利用
         for (i in particles.indices) {
             if (!particles[i].isActive) {
-                spawnParticle(particles[i], worldX, worldY)
+                spawnParticle(particles[i], worldX, touchY)
                 spawnedCount++
                 if (spawnedCount >= BURST_COUNT) return
             }
@@ -121,7 +121,7 @@ class ParticleSystem {
         val needed = BURST_COUNT - spawnedCount
         repeat(needed) {
             val randomIndex = Random.nextInt(POOL_SIZE)
-            spawnParticle(particles[randomIndex], worldX, worldY)
+            spawnParticle(particles[randomIndex], worldX, touchY)
         }
     }
 
