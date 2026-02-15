@@ -22,7 +22,7 @@ class SkySystem(context: Context) {
 
     private var xOffset: Float = 0f
     private val parallaxFactor = 0.3f
-    private val scale = 1.4f
+    private val scale = 1.3f
 
     init {
         val original = BitmapFactory.decodeResource(context.resources, R.drawable.ethereal_bg)
