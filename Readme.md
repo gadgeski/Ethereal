@@ -1,41 +1,90 @@
-# Igniter ⚡️
+# Ethereal - Live Wallpaper Engine
 
-A high-performance, cyberpunk-inspired Android Live Wallpaper application featuring interactive particle physics and a "breathing" hexagonal grid system.
+> **"Touch the Void."**
+>
+> A programmable artwork that renders a living, breathing ethereal world directly on your Android home screen.
 
-## ✨ Features
+## 📱 Overview
 
-* **Interactive Particle System:** Tap to ignite thousands of "Laser Sparks" that react to physics and collide with screen boundaries.
-* **"Limit Break" Performance:** Optimized to handle 1,000+ active particles at 60fps using object pooling.
-* **Ambient Background:** A "breathing" hexagonal grid (Honeycomb) that adds depth and cyberpunk aesthetics without draining the battery.
-* **User Friendly:** Simple activation via a dedicated "Set Wallpaper" UI (Jetpack Compose).
+**Ethereal** is a high-performance Android Live Wallpaper application built entirely with **Kotlin** and native **Android Canvas API**.
 
-## 🛠 Tech Stack & Architecture
+Unlike typical video-loop wallpapers, Ethereal renders every frame in real-time, simulating fluid dynamics for fog, particle physics for light, and multi-layer parallax for depth. It transforms the static home screen into an immersive "DailySync" experience—calm, intelligent, and reactive.
 
-* **Language:** Kotlin
-* **Graphics:** Android Canvas API (Custom SurfaceView)
-* **DI:** Hilt (Dagger)
-* **UI:** Jetpack Compose (MainActivity)
-* **Concurrency:** Kotlin Coroutines
+## ✨ Key Features
 
-## 🚀 Engineering Highlights
+### 1. Multi-Layer Parallax Depth
 
-### 1. Zero Allocation Policy (Performance)
-To prevent Garbage Collection (GC) stuttering during the drawing loop:
-* **Object Pooling:** `Particle` objects are reused from a fixed-size pool. No `new` allocations occur in the `onDraw` loop.
-* **Path Caching:** The complex hexagonal grid path is calculated **only once** upon surface resize and cached. The `draw()` method only handles rendering and alpha pulsing.
+Implemented a custom parallax engine that moves layers at different velocities relative to the scroll offset, creating a genuine 3D illusion.
 
-### 2. Architecture
-* **Separation of Concerns:** The drawing logic (`IgniterRenderer`) is completely decoupled from the Android lifecycle service (`IgniterWallpaperService`).
-* **Battery Efficiency:** The drawing loop automatically stops when the screen is invisible or locked.
+- **Background (Sky):** Moves at **30%** speed (Factor 0.3) for stability.
 
-## 📦 Installation
+- **Midground (Fog):** Moves at **50%** speed (Factor 0.5) with seamless wrap-around logic.
 
-1.  Clone this repository.
-2.  Open in Android Studio.
-3.  Build and Run on a device/emulator.
-4.  Tap **"Set Wallpaper"** on the launch screen.
+- **Foreground (Particles):** Moves at **120%** speed (Factor 1.2), creating a dynamic "pop-out" effect.
 
-## 🎨 Design Philosophy (Mode: Abbozzo)
 
-* **Chaos vs. Order:** The chaotic movement of particles contrasts with the structured, rhythmic breathing of the background grid.
-* **Visual Depth:** Thicker grid lines with low opacity create a sense of depth, ensuring the foreground particles pop.
+### 2. Physics-Based Interaction
+
+The fog isn't just an animation; it's a simulation.
+
+- **Fluid Repulsion:** Fog particles react to touch input, gently parting ways based on vector calculations.
+
+- **Inertia & Damping:** Objects carry velocity and slow down naturally due to simulated air resistance (damping factor 0.92).
+
+
+### 3. Reactive Particle System
+
+- **Touch Ignition:** Spawns bursts of light particles exactly at the touch coordinates (corrected for parallax shift).
+
+- **Dynamic Pooling:** Manages a pool of **2,000+ particles** efficiently, ensuring zero frame drops even during intense interaction.
+
+
+## 🛠 Technical Highlights
+
+- **Pure Canvas Rendering:** No heavy game engines (Unity/Unreal) or OpenGL dependencies. Lightweight and battery-efficient.
+
+- **Memory Optimization:** Uses a single `Bitmap` for the background and recycles objects to prevent Garbage Collection (GC) pauses.
+
+- **Mathematical Precision:** - Custom coordinate transformation logic to map screen touch points to the parallax-shifted world.
+
+    - `Canvas.scale` and `translate` optimization to prevent background clipping on wide scrolls.
+
+
+## 📂 Architecture
+
+The project follows a clean separation of concerns, ensuring maintainability and scalability.
+
+```
+com.gadgeski.ethereal
+├── EtherealWallpaperService.kt  # Entry Point (Service)
+└── renderer/
+    ├── EtherealRenderer.kt      # Main Render Loop & State Manager
+    ├── SkySystem.kt             # Background Layer (Bitmap & Parallax)
+    ├── FogSystem.kt             # Physics Layer (Repulsion Logic)
+    └── ParticleSystem.kt        # Foreground Layer (Pooling & Ignition)
+```
+
+## 🚀 Getting Started
+
+1. Clone the repository.
+
+    ```
+    git clone [https://github.com/gadgeski/Ethereal.git](https://github.com/gadgeski/Ethereal.git)
+    ```
+
+2. Open in **Android Studio**.
+
+3. Build and Run on a physical device (Emulators may not support Live Wallpapers fully).
+
+4. Select "Ethereal" from the Wallpaper picker.
+
+## 🎨 Design Philosophy
+
+- **Mode:** DailySync (Lifestyle/Cafe)
+
+- **Palette:** Deep Purple, Sunset Orange, Cyan & White Glitch accents.
+
+- **Concept:** A window to a digital ether that bridges the gap between the organic and the synthetic.
+
+
+Designed & Engineered by **Gemini customized with Gem**.
