@@ -31,6 +31,10 @@ class EtherealRenderer(private val context: Context) {
     private var touchY = 0f
     private var isTouching = false
 
+    // Gravity sensor state
+    private var gravityX = 0f
+    private var gravityY = 0f
+
     private val drawRunner = object : Runnable {
         override fun run() {
             draw()
@@ -76,6 +80,12 @@ class EtherealRenderer(private val context: Context) {
         touchX = x
         touchY = y
         isTouching = touching
+    }
+
+    /** センサーからの重力値を受け取る */
+    fun updateGravity(gx: Float, gy: Float) {
+        gravityX = gx
+        gravityY = gy
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -138,6 +148,7 @@ class EtherealRenderer(private val context: Context) {
                 fogSystem.draw(canvas)
 
                 // 3) パーティクル
+                particleSystem.updateGravity(gravityX, gravityY)
                 particleSystem.update(screenWidth, screenHeight)
                 particleSystem.draw(canvas)
             }

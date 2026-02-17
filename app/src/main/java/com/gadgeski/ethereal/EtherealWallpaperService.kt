@@ -1,5 +1,9 @@
 package com.gadgeski.ethereal
 
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
 import android.view.SurfaceHolder
@@ -11,41 +15,51 @@ class EtherealWallpaperService : WallpaperService() {
         return EtherealEngine()
     }
 
-    inner class EtherealEngine : Engine() {
+    inner class EtherealEngine : Engine(), SensorEventListener {
 
         // レンダラーのインスタンス生成
-        // ここで applicationContext を渡すことで "No value passed for parameter 'context'" を解消
         private val renderer = EtherealRenderer(applicationContext)
+
+        // センサー管理
+        private var sensorManager: SensorManager? = null
+        private var accelerometer: Sensor? = null
 
         override fun onCreate(surfaceHolder: SurfaceHolder?) {
             super.onCreate(surfaceHolder)
-            // タッチイベントを受け取る設定
             setTouchEventsEnabled(true)
+
+            // SensorManager を取得し加速度センサーを保持
+            sensorManager = getSystemService(SENSOR_SERVICE) as? SensorManager
+            accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         }
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
             super.onSurfaceCreated(holder)
-            // レンダラーに SurfaceHolder を渡す
             renderer.onSurfaceCreated(holder)
         }
 
         override fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             super.onSurfaceChanged(holder, format, width, height)
-            // レンダラーにサイズ変更を通知
-            // (以前の setSurfaceSize の代わり)
             renderer.onSurfaceChanged(holder, width, height)
         }
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
             super.onSurfaceDestroyed(holder)
-            // レンダラーに破棄を通知
             renderer.onSurfaceDestroyed()
         }
 
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
-            // 表示/非表示の状態を通知 (描画ループの開始/停止を制御)
             renderer.onVisibilityChanged(visible)
+
+            // バッテリー節約: 表示中のみセンサーリスナーを登録
+            if (visible) {
+                accelerometer?.let {
+                    sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+                }
+            } else {
+                sensorManager?.unregisterListener(this)
+            }
         }
 
         override fun onOffsetsChanged(
@@ -57,18 +71,28 @@ class EtherealWallpaperService : WallpaperService() {
             yPixelOffset: Int
         ) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset)
-            // 視差効果のためのオフセット通知
-            // これを呼ぶことでレンダラー側の "never used" 警告も解消します
             renderer.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset)
         }
 
         override fun onTouchEvent(event: MotionEvent?) {
             super.onTouchEvent(event)
-            event?.let {
-                // タッチイベントを通知
-                // (以前の updateTouch の代わり)
-                renderer.onTouchEvent(it)
-            }
+            event?.let { renderer.onTouchEvent(it) }
+        }
+
+        // --- SensorEventListener ---
+
+        override fun onSensorChanged(event: SensorEvent?) {
+            event ?: return
+            // Canvas座標系に変換: 右=+X, 下=+Y
+            // Sensor X は左側が下のとき正 → 反転して渡す
+            // Sensor Y は下側が下のとき正 → そのまま渡す
+            val gx = -event.values[0]
+            val gy = event.values[1]
+            renderer.updateGravity(gx, gy)
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+            // 精度変更時の処理は不要
         }
     }
 }

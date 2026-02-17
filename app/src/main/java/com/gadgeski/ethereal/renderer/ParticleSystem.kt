@@ -19,6 +19,9 @@ class ParticleSystem {
         private const val SPEED_MIN = 3.0f
         private const val SPEED_MAX = 18.0f
 
+        // センサー重力の影響係数 (加速度 ~9.8 を穏やかに反映)
+        private const val GRAVITY_FACTOR = 0.02f
+
         // Ethereal カラーパレット
         private const val COLOR_GLOW_WHITE = 0xFFFFFFFF.toInt()
         private const val COLOR_NEON_CYAN  = 0xFF00FFFF.toInt()
@@ -33,6 +36,10 @@ class ParticleSystem {
 
     // パーティクルの視差係数 (1.2 = 背景より手前にある演出)
     private val parallaxFactor = 1.2f
+
+    // センサー重力値
+    private var sensorGx = 0f
+    private var sensorGy = 0f
 
     // 描画用Paint
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -55,8 +62,12 @@ class ParticleSystem {
                 p.dx *= 0.92f
                 p.dy *= 0.92f
 
-                // わずかな重力（または浮力）
-                p.dy -= 0.02f // ゆっくり上昇
+                // わずかな浮力（ゆっくり上昇）
+                p.dy -= 0.02f
+
+                // センサー重力の影響を適用
+                p.dx += sensorGx * GRAVITY_FACTOR
+                p.dy += sensorGy * GRAVITY_FACTOR
 
                 // 画面外判定
                 val margin = 500f
@@ -75,6 +86,12 @@ class ParticleSystem {
 
     fun setParallax(offset: Float) {
         this.xOffset = offset
+    }
+
+    /** センサーからの重力値を更新する */
+    fun updateGravity(gx: Float, gy: Float) {
+        sensorGx = gx
+        sensorGy = gy
     }
 
     fun draw(canvas: Canvas) {
