@@ -17,7 +17,8 @@ class SkySystem(context: Context) {
     private val skyBitmap: Bitmap
     private val srcRect: Rect
     private val dstRect = Rect()
-    private val paint = Paint(Paint.FILTER_BITMAP_FLAG)
+    // 警告が出ないよう、適切なフラグ設定
+    private val paint = Paint(Paint.FILTER_BITMAP_FLAG or Paint.ANTI_ALIAS_FLAG)
 
     private var screenWidth = 0
     private var screenHeight = 0
@@ -26,8 +27,13 @@ class SkySystem(context: Context) {
     private val parallaxFactor = 0.3f
     private val scale = 1.3f
 
-    // Aurora Shift: センサー重力X値
-    private var gravityX: Float = 0f
+    // --- Aurora Shift (Smoothing Logic) ---
+    // 生のセンサー値（目標値）
+    private var targetGravityX: Float = 0f
+    // 描画用に滑らかにした値（現在値）
+    private var smoothedGravityX: Float = 0f
+    // 追従係数 (0.05f = 毎フレーム5%ずつ目標に近づく)
+    private val smoothingFactor = 0.05f
 
     init {
         val original = BitmapFactory.decodeResource(context.resources, R.drawable.ethereal_bg)
@@ -38,15 +44,14 @@ class SkySystem(context: Context) {
     fun updateSize(width: Int, height: Int) {
         screenWidth = width
         screenHeight = height
+        // 描画先領域を更新（毎回newしない最適化）
         dstRect.set(0, 0, width, height)
     }
 
-    // ← EtherealRenderer から呼ばれる想定API
     fun setParallax(offset: Float) {
         xOffset = offset
     }
 
-    // ← EtherealRenderer から呼ばれる想定API
     @Suppress("UNUSED_PARAMETER")
     fun onTouch(event: MotionEvent) {
         // 将来拡張用
@@ -54,28 +59,35 @@ class SkySystem(context: Context) {
 
     /** センサー重力X値を更新する (Aurora Shift 用) */
     fun updateGravity(gx: Float) {
-        this.gravityX = gx
+        // ここでは「目標値」をセットするだけ
+        this.targetGravityX = gx
     }
 
     fun draw(canvas: Canvas) {
         if (screenWidth == 0 || screenHeight == 0) return
 
+        // 1. スムージング計算 (ここが滑らかさの肝です)
+        smoothedGravityX += (targetGravityX - smoothedGravityX) * smoothingFactor
+
         val scaledWidth = screenWidth * scale
         val scaledHeight = screenHeight * scale
-
         val baseX = (screenWidth - scaledWidth) / 2f
         val baseY = (screenHeight - scaledHeight) / 2f
         val parallaxX = -xOffset * screenWidth * parallaxFactor
 
+        // KTXのスコープ関数を使用して記述（美しい！）
         canvas.withTranslation(baseX + parallaxX, baseY) {
+            // このブロック内の `this` は Canvas インスタンス
             scale(scale, scale)
             drawBitmap(skyBitmap, srcRect, dstRect, paint)
 
             // Aurora Shift: 傾きに応じた色オーバーレイ
-            val intensity = (abs(gravityX) * 2.0f).coerceIn(0f, 1f)
+            // smoothedGravityX を使用してチカチカを防止
+            val intensity = (abs(smoothedGravityX) * 2.0f).coerceIn(0f, 1f)
             val alpha = (intensity * 80).toInt()
+
             if (alpha > 0) {
-                val color = if (gravityX > 0) {
+                val color = if (smoothedGravityX > 0) {
                     // 右傾き → Cyan
                     Color.argb(alpha, 0, 255, 255)
                 } else {
