@@ -86,6 +86,11 @@ class EtherealRenderer(private val context: Context) {
     fun updateGravity(gx: Float, gy: Float) {
         gravityX = gx
         gravityY = gy
+
+        // Aurora Shift: SkySystem に重力X値を中継
+        if (::skySystem.isInitialized) {
+            skySystem.updateGravity(gx)
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")
