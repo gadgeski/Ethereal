@@ -88,11 +88,11 @@ class SkySystem(context: Context) {
 
             if (alpha > 0) {
                 val color = if (smoothedGravityX > 0) {
-                    // 右傾き → Cyan
-                    Color.argb(alpha, 0, 255, 255)
+                    // 右傾き → Light blue
+                    Color.argb(alpha, 204, 201, 223)
                 } else {
-                    // 左傾き → Magenta
-                    Color.argb(alpha, 255, 0, 255)
+                    // 左傾き → Orange
+                    Color.argb(alpha, 243, 150, 106)
                 }
                 drawColor(color)
             }
