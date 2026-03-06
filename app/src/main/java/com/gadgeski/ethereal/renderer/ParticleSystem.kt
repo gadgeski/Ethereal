@@ -24,8 +24,8 @@ class ParticleSystem {
 
         // Ethereal カラーパレット
         private const val COLOR_GLOW_WHITE = 0xFFFFFFFF.toInt()
-        private const val COLOR_NEON_CYAN  = 0xFF00FFFF.toInt()
-        private const val COLOR_DEEP_BLUE  = 0xFF4400FF.toInt()
+        private const val COLOR_CALM_PURPLE  = 0xFFba9cbe.toInt()
+        private const val COLOR_DEEP_ORANGE  = 0xFFDC5224.toInt()
     }
 
     // 配列で事前確保
@@ -152,8 +152,8 @@ class ParticleSystem {
         val randColor = Random.nextDouble()
         val color = when {
             randColor < 0.1 -> COLOR_GLOW_WHITE
-            randColor < 0.4 -> COLOR_NEON_CYAN
-            else -> COLOR_DEEP_BLUE
+            randColor < 0.4 -> COLOR_CALM_PURPLE
+            else -> COLOR_DEEP_ORANGE
         }
 
         val strokeWidth = Random.nextDouble(3.0, 12.0).toFloat()
