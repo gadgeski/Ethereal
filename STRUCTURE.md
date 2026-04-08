@@ -15,6 +15,7 @@ Ethereal/
 │       │                   └── ExampleInstrumentedTest.kt
 │       ├── main
 │       │   ├── AndroidManifest.xml
+│       │   ├── ic_launcher-playstore.png
 │       │   ├── java
 │       │   │   └── com
 │       │   │       └── gadgeski
@@ -36,26 +37,33 @@ Ethereal/
 │       │   │                       └── Type.kt
 │       │   └── res
 │       │       ├── drawable
-│       │       │   ├── ethereal_bg.png
+│       │       │   ├── bg_vivid_abstract.webp
+│       │       │   ├── ethereal_bg.webp
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
 │       │       ├── mipmap-anydpi
+│       │       ├── mipmap-anydpi-v26
 │       │       │   ├── ic_launcher.xml
 │       │       │   └── ic_launcher_round.xml
 │       │       ├── mipmap-hdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-mdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xhdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xxhdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xxxhdpi
 │       │       │   ├── ic_launcher.webp
+│       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── values
 │       │       │   ├── colors.xml
@@ -83,5 +91,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-34 directories, 49 files
+35 directories, 56 files
 ```
