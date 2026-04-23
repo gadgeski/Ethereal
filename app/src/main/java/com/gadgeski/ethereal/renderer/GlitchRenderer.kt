@@ -119,6 +119,7 @@ class GlitchRenderer {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onSurfaceChanged(width: Int, height: Int) {}
 
     fun draw(time: Float, touchX: Float, touchY: Float, isTouching: Boolean) {
