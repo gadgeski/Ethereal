@@ -24,12 +24,11 @@ Ethereal/
 │       │   │               ├── EtherealWallpaperService.kt
 │       │   │               ├── MainActivity.kt
 │       │   │               ├── model
-│       │   │               │   └── Particle.kt
 │       │   │               ├── renderer
-│       │   │               │   ├── EtherealRenderer.kt
-│       │   │               │   ├── FogSystem.kt
-│       │   │               │   ├── ParticleSystem.kt
-│       │   │               │   └── SkySystem.kt
+│       │   │               │   ├── BackgroundRenderer.kt
+│       │   │               │   ├── EtherealGLRenderer.kt
+│       │   │               │   ├── GlitchRenderer.kt
+│       │   │               │   └── ParticleRenderer.kt
 │       │   │               └── ui
 │       │   │                   └── theme
 │       │   │                       ├── Color.kt
@@ -96,5 +95,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-35 directories, 61 files
+35 directories, 60 files
 ```
