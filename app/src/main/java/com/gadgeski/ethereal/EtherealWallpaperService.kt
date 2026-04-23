@@ -4,10 +4,11 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.opengl.GLSurfaceView
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
 import android.view.SurfaceHolder
-import com.gadgeski.ethereal.renderer.EtherealRenderer
+import com.gadgeski.ethereal.renderer.EtherealGLRenderer
 
 class EtherealWallpaperService : WallpaperService() {
 
@@ -17,10 +18,9 @@ class EtherealWallpaperService : WallpaperService() {
 
     inner class EtherealEngine : Engine(), SensorEventListener {
 
-        // レンダラーのインスタンス生成
-        private val renderer = EtherealRenderer(applicationContext)
+        private val renderer = EtherealGLRenderer(applicationContext)
+        private var glSurfaceView: WallpaperGLSurfaceView? = null
 
-        // センサー管理
         private var sensorManager: SensorManager? = null
         private var accelerometer: Sensor? = null
 
@@ -28,36 +28,41 @@ class EtherealWallpaperService : WallpaperService() {
             super.onCreate(surfaceHolder)
             setTouchEventsEnabled(true)
 
-            // SensorManager を取得し加速度センサーを保持
+            glSurfaceView = WallpaperGLSurfaceView(applicationContext).also { view ->
+                view.setEGLContextClientVersion(2)
+                view.setRenderer(renderer)
+                view.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+            }
+
             sensorManager = getSystemService(SENSOR_SERVICE) as? SensorManager
             accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         }
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
             super.onSurfaceCreated(holder)
-            renderer.onSurfaceCreated(holder)
         }
 
         override fun onSurfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
             super.onSurfaceChanged(holder, format, width, height)
-            renderer.onSurfaceChanged(holder, width, height)
         }
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
             super.onSurfaceDestroyed(holder)
-            renderer.onSurfaceDestroyed()
+            glSurfaceView?.onDetachedFromWindow()
+            glSurfaceView = null
         }
 
         override fun onVisibilityChanged(visible: Boolean) {
             super.onVisibilityChanged(visible)
             renderer.onVisibilityChanged(visible)
 
-            // バッテリー節約: 表示中のみセンサーリスナーを登録
             if (visible) {
+                glSurfaceView?.onResume()
                 accelerometer?.let {
                     sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
                 }
             } else {
+                glSurfaceView?.onPause()
                 sensorManager?.unregisterListener(this)
             }
         }
@@ -71,7 +76,7 @@ class EtherealWallpaperService : WallpaperService() {
             yPixelOffset: Int
         ) {
             super.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset)
-            renderer.onOffsetsChanged(xOffset, yOffset, xOffsetStep, yOffsetStep, xPixelOffset, yPixelOffset)
+            renderer.onOffsetsChanged(xOffset, yOffset)
         }
 
         override fun onTouchEvent(event: MotionEvent?) {
@@ -79,20 +84,20 @@ class EtherealWallpaperService : WallpaperService() {
             event?.let { renderer.onTouchEvent(it) }
         }
 
-        // --- SensorEventListener ---
-
         override fun onSensorChanged(event: SensorEvent?) {
             event ?: return
-            // Canvas座標系に変換: 右=+X, 下=+Y
-            // Sensor X は左側が下のとき正 → 反転して渡す
-            // Sensor Y は下側が下のとき正 → そのまま渡す
             val gx = -event.values[0]
             val gy = event.values[1]
             renderer.updateGravity(gx, gy)
         }
 
-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-            // 精度変更時の処理は不要
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+        // WallpaperServiceのSurfaceHolderをGLSurfaceViewに橋渡しするクラス
+        inner class WallpaperGLSurfaceView(
+            context: android.content.Context
+        ) : GLSurfaceView(context) {
+            override fun getHolder(): SurfaceHolder = surfaceHolder
         }
     }
 }

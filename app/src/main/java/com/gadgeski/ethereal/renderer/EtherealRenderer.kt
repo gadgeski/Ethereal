@@ -1,176 +1,97 @@
 package com.gadgeski.ethereal.renderer
 
 import android.content.Context
-import android.graphics.Canvas
-import android.os.Handler
-import android.os.Looper
+import android.opengl.GLES20
+import android.opengl.GLSurfaceView
 import android.view.MotionEvent
-import android.view.SurfaceHolder
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
 
-class EtherealRenderer(private val context: Context) {
-
-    private var surfaceHolder: SurfaceHolder? = null
-    private var isVisible = false
-
-    private val handler = Handler(Looper.getMainLooper())
+class EtherealGLRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
     private var screenWidth = 0
     private var screenHeight = 0
 
-    // 背景（空）のシステム
-    private lateinit var skySystem: SkySystem
-
-    // 霧のシステム
-    private val fogSystem = FogSystem()
-
-    // パーティクルのシステム
-    private val particleSystem = ParticleSystem()
-
-    // Touch state
     private var touchX = 0f
     private var touchY = 0f
     private var isTouching = false
 
-    // Gravity sensor state
     private var gravityX = 0f
     private var gravityY = 0f
 
-    private val drawRunner = object : Runnable {
-        override fun run() {
-            draw()
-            if (isVisible) {
-                handler.postDelayed(this, FRAME_DELAY_MS)
-            }
-        }
+    private var xOffset = 0f
+
+    private var startTime = 0L
+
+    private lateinit var backgroundRenderer: BackgroundRenderer
+    private lateinit var glitchRenderer: GlitchRenderer
+    private lateinit var particleRenderer: ParticleRenderer
+
+    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+        GLES20.glClearColor(0f, 0f, 0f, 1f)
+        GLES20.glEnable(GLES20.GL_BLEND)
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+
+        startTime = System.currentTimeMillis()
+
+        backgroundRenderer = BackgroundRenderer(context)
+        glitchRenderer = GlitchRenderer()
+        particleRenderer = ParticleRenderer()
     }
 
-    fun onSurfaceCreated(holder: SurfaceHolder) {
-        surfaceHolder = holder
-        if (!::skySystem.isInitialized) {
-            skySystem = SkySystem(context)
-        }
-    }
-
-    fun onSurfaceChanged(holder: SurfaceHolder, width: Int, height: Int) {
-        surfaceHolder = holder
+    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+        GLES20.glViewport(0, 0, width, height)
         screenWidth = width
         screenHeight = height
 
-        if (!::skySystem.isInitialized) {
-            skySystem = SkySystem(context)
-        }
-
-        skySystem.updateSize(width, height)
-        fogSystem.updateSize(width, height)
-
-        draw()
+        backgroundRenderer.onSurfaceChanged(width, height)
+        glitchRenderer.onSurfaceChanged(width, height)
+        particleRenderer.onSurfaceChanged(width, height)
     }
 
-    fun onSurfaceDestroyed() {
-        stop()
-        surfaceHolder = null
+    override fun onDrawFrame(gl: GL10?) {
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
+
+        val elapsed = (System.currentTimeMillis() - startTime) / 1000f
+
+        // 1) 背景テクスチャ + スキャンライン
+        backgroundRenderer.draw(elapsed, xOffset)
+
+        // 2) グリッチオーバーレイ
+        glitchRenderer.draw(elapsed, touchX, touchY, isTouching)
+
+        // 3) パーティクル
+        particleRenderer.update(gravityX, gravityY, screenWidth, screenHeight)
+        particleRenderer.draw(elapsed)
     }
 
     fun onVisibilityChanged(visible: Boolean) {
-        isVisible = visible
-        if (visible) start() else stop()
+        // GLSurfaceViewのonPause/onResumeで制御するため現状は空
     }
 
-    fun updateTouch(x: Float, y: Float, touching: Boolean) {
-        touchX = x
-        touchY = y
-        isTouching = touching
-    }
-
-    /** センサーからの重力値を受け取る */
-    fun updateGravity(gx: Float, gy: Float) {
-        gravityX = gx
-        gravityY = gy
-
-        // Aurora Shift: SkySystem に重力X値を中継
-        if (::skySystem.isInitialized) {
-            skySystem.updateGravity(gx)
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun onOffsetsChanged(
-        xOffset: Float,
-        yOffset: Float,
-        xOffsetStep: Float,
-        yOffsetStep: Float,
-        xPixelOffset: Int,
-        yPixelOffset: Int
-    ) {
-        if (!::skySystem.isInitialized) return
-
-        skySystem.setParallax(xOffset)
-        fogSystem.setParallax(xOffset)
-        particleSystem.setParallax(xOffset)
+    fun onOffsetsChanged(xOffset: Float, yOffset: Float) {
+        this.xOffset = xOffset
     }
 
     fun onTouchEvent(event: MotionEvent) {
-        if (!::skySystem.isInitialized) return
-
         val x = event.x
         val y = event.y
 
         when (event.actionMasked) {
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> updateTouch(x, y, false)
-            else -> updateTouch(x, y, true)
-        }
-
-        skySystem.onTouch(event)
-
-        if (event.actionMasked == MotionEvent.ACTION_DOWN || event.actionMasked == MotionEvent.ACTION_MOVE) {
-            particleSystem.ignite(x, y)
-        }
-    }
-
-    private fun start() {
-        handler.removeCallbacks(drawRunner)
-        handler.post(drawRunner)
-    }
-
-    private fun stop() {
-        handler.removeCallbacks(drawRunner)
-    }
-
-    private fun draw() {
-        val holder = surfaceHolder ?: return
-        if (!::skySystem.isInitialized) return
-        if (screenWidth <= 0 || screenHeight <= 0) return
-
-        var canvas: Canvas? = null
-        try {
-            canvas = holder.lockCanvas()
-            if (canvas != null) {
-                // 1) 背景
-                skySystem.draw(canvas)
-
-                // 2) 霧
-                fogSystem.update(screenWidth, screenHeight, touchX, touchY, isTouching)
-                fogSystem.draw(canvas)
-
-                // 3) パーティクル
-                particleSystem.updateGravity(gravityX, gravityY)
-                particleSystem.update(screenWidth, screenHeight)
-                particleSystem.draw(canvas)
+            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                touchX = x
+                touchY = y
+                isTouching = true
+                particleRenderer.ignite(x, y)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            if (canvas != null) {
-                try {
-                    holder.unlockCanvasAndPost(canvas)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                isTouching = false
             }
         }
     }
 
-    private companion object {
-        private const val FRAME_DELAY_MS = 16L
+    fun updateGravity(gx: Float, gy: Float) {
+        gravityX = gx
+        gravityY = gy
     }
 }
