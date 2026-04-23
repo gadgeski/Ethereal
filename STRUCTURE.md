@@ -37,7 +37,12 @@ Ethereal/
 │       │   │                       └── Type.kt
 │       │   └── res
 │       │       ├── drawable
+│       │       │   ├── bg_flower_comical_abstract.webp
+│       │       │   ├── bg_glitch_highway.webp
+│       │       │   ├── bg_graffiti_abstract.webp
 │       │       │   ├── bg_vivid_abstract.webp
+│       │       │   ├── bg_wavy_abstract.webp
+│       │       │   ├── bg_wood_grain_abstract.webp
 │       │       │   ├── ethereal_bg.webp
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
@@ -91,5 +96,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-35 directories, 56 files
+35 directories, 61 files
 ```
