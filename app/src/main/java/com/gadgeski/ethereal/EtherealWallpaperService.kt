@@ -73,14 +73,20 @@ class EtherealWallpaperService : WallpaperService() {
 
         override fun onTouchEvent(event: MotionEvent?) {
             super.onTouchEvent(event)
-            event?.let { renderer.onTouchEvent(it) }
+            event?.let { e ->
+                glSurfaceView?.queueEvent {
+                    renderer.onTouchEvent(e)
+                }
+            }
         }
 
         override fun onSensorChanged(event: SensorEvent?) {
             event ?: return
             val gx = -event.values[0]
             val gy = event.values[1]
-            renderer.updateGravity(gx, gy)
+            glSurfaceView?.queueEvent {
+                renderer.updateGravity(gx, gy)
+            }
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
