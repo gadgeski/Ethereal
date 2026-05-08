@@ -119,8 +119,14 @@ class GlitchRenderer {
         }
     }
 
+    private var screenWidth = 1080f
+    private var screenHeight = 2400f
+
     @Suppress("UNUSED_PARAMETER")
-    fun onSurfaceChanged(width: Int, height: Int) {}
+    fun onSurfaceChanged(width: Int, height: Int) {
+        screenWidth = width.toFloat()
+        screenHeight = height.toFloat()
+    }
 
     fun draw(time: Float, touchX: Float, touchY: Float, isTouching: Boolean) {
         GLES20.glUseProgram(programId)
@@ -139,8 +145,8 @@ class GlitchRenderer {
         GLES20.glVertexAttribPointer(texLoc, 2, GLES20.GL_FLOAT, false, 0, texCoordBuffer)
 
         GLES20.glUniform1f(timeLoc, time)
-        GLES20.glUniform1f(touchXLoc, touchX / 1080f)
-        GLES20.glUniform1f(touchYLoc, touchY / 2400f)
+        GLES20.glUniform1f(touchXLoc, touchX / screenWidth)
+        GLES20.glUniform1f(touchYLoc, touchY / screenHeight)
         GLES20.glUniform1f(isTouchingLoc, if (isTouching) 1f else 0f)
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
