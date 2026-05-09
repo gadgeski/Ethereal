@@ -1,6 +1,7 @@
 package com.gadgeski.ethereal.renderer
 
 import android.opengl.GLES20
+import com.gadgeski.ethereal.settings.WallpaperTheme
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -11,6 +12,7 @@ class ParticleRenderer {
     private var programId = 0
     private var screenWidth = 0
     private var screenHeight = 0
+    private var particleDensity = 0.4f
 
     private val maxParticles = 200
     private val particles = ArrayList<GlitchParticle>(maxParticles)
@@ -41,7 +43,6 @@ class ParticleRenderer {
         }
     """.trimIndent()
 
-    // グリッチパーティクルのデータクラス
     data class GlitchParticle(
         var x: Float,
         var y: Float,
@@ -53,7 +54,6 @@ class ParticleRenderer {
         val colorIndex: Int
     )
 
-    // シアン・マゼンタ・ホワイトの3色
     private val colors = arrayOf(
         floatArrayOf(0f, 1f, 1f),
         floatArrayOf(1f, 0f, 1f),
@@ -77,10 +77,14 @@ class ParticleRenderer {
     }
 
     private fun setupBuffers() {
-        // position(x,y) + alpha + size = 4 floats per particle
         vertexBuffer = ByteBuffer.allocateDirect(maxParticles * 4 * 4)
             .order(ByteOrder.nativeOrder())
             .asFloatBuffer()
+    }
+
+    fun setTheme(theme: WallpaperTheme) {
+        particleDensity = theme.particleDensity
+        particles.clear()
     }
 
     fun onSurfaceChanged(width: Int, height: Int) {
@@ -90,7 +94,7 @@ class ParticleRenderer {
 
     fun ignite(screenX: Float, screenY: Float) {
         if (screenWidth <= 0 || screenHeight <= 0) return
-        val count = Random.nextInt(5, 12)
+        val count = (Random.nextInt(5, 12) * particleDensity).toInt().coerceAtLeast(1)
         repeat(count) {
             if (particles.size >= maxParticles) return@repeat
             val angle = Random.nextFloat() * Math.PI.toFloat() * 2f
@@ -128,8 +132,9 @@ class ParticleRenderer {
             if (p.life <= 0f) iterator.remove()
         }
 
-        // 自律的にランダム生成（散発的）
-        if (particles.size < maxParticles && Random.nextFloat() < 0.15f) {
+        // particleDensityに応じた自律生成頻度
+        val spawnChance = 0.05f + particleDensity * 0.15f
+        if (particles.size < maxParticles && Random.nextFloat() < spawnChance) {
             spawnAmbientParticle()
         }
     }
@@ -164,7 +169,6 @@ class ParticleRenderer {
         val sizeLoc = GLES20.glGetAttribLocation(programId, "aSize")
         val colorLoc = GLES20.glGetUniformLocation(programId, "uColor")
 
-        // 色ごとにバッチ描画
         colors.forEachIndexed { colorIndex, color ->
             val batch = particles.filter { it.colorIndex == colorIndex }
             if (batch.isEmpty()) return@forEachIndexed
@@ -178,7 +182,7 @@ class ParticleRenderer {
             }
             vertexBuffer.position(0)
 
-            val stride = 4 * 4 // 4 floats * 4 bytes
+            val stride = 4 * 4
 
             GLES20.glEnableVertexAttribArray(posLoc)
             GLES20.glVertexAttribPointer(posLoc, 2, GLES20.GL_FLOAT, false, stride, vertexBuffer)

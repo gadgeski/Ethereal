@@ -1,15 +1,13 @@
 package com.gadgeski.ethereal.renderer
 
-import android.content.Context
-import android.graphics.BitmapFactory
 import android.opengl.GLES20
 import android.opengl.GLUtils
-import com.gadgeski.ethereal.R
+import com.gadgeski.ethereal.settings.WallpaperTheme
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
 
-class BackgroundRenderer(private val context: Context) {
+class BackgroundRenderer {
 
     private var programId = 0
     private var textureId = 0
@@ -17,10 +15,12 @@ class BackgroundRenderer(private val context: Context) {
     private var screenWidth = 0
     private var screenHeight = 0
 
+    private var glitchIntensity = 0.6f
+    private var scanlineStrength = 0.04f
+
     private lateinit var vertexBuffer: FloatBuffer
     private lateinit var texCoordBuffer: FloatBuffer
 
-    // フルスクリーンの四角形
     private val vertices = floatArrayOf(
         -1f,  1f,
         -1f, -1f,
@@ -50,7 +50,8 @@ class BackgroundRenderer(private val context: Context) {
         precision mediump float;
         uniform sampler2D uTexture;
         uniform float uTime;
-        varying vec2 vTexCoord;
+        uniform float uGlitchIntensity;
+        uniform float uScanlineStrength;
 
         float rand(vec2 co) {
             return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -60,16 +61,18 @@ class BackgroundRenderer(private val context: Context) {
             vec2 uv = vTexCoord;
 
             // スキャンライン
-            float scanline = sin(uv.y * 800.0) * 0.04;
+            float scanline = sin(uv.y * 800.0) * uScanlineStrength;
 
-            // 散発的グリッチ: 時間でトリガー
+            // 散発的グリッチ
             float glitchTrigger = step(0.92, rand(vec2(floor(uTime * 3.0), 0.0)));
-            float glitchStrength = glitchTrigger * 0.03;
-            float glitchBand = step(rand(vec2(floor(uv.y * 20.0), floor(uTime * 3.0))), 0.3);
+            float glitchStrength = glitchTrigger * 0.03 * uGlitchIntensity;
+            float glitchBand = step(
+                rand(vec2(floor(uv.y * 20.0), floor(uTime * 3.0))), 0.3
+            );
             uv.x += glitchStrength * glitchBand * rand(vec2(uv.y, uTime));
 
             // RGBシフト
-            float shift = glitchTrigger * 0.008;
+            float shift = glitchTrigger * 0.008 * uGlitchIntensity;
             float r = texture2D(uTexture, vec2(uv.x + shift, uv.y)).r;
             float g = texture2D(uTexture, uv).g;
             float b = texture2D(uTexture, vec2(uv.x - shift, uv.y)).b;
@@ -82,7 +85,6 @@ class BackgroundRenderer(private val context: Context) {
     init {
         setupBuffers()
         setupShader()
-        loadTexture()
     }
 
     private fun setupBuffers() {
@@ -108,10 +110,22 @@ class BackgroundRenderer(private val context: Context) {
         }
     }
 
-    private fun loadTexture() {
+    fun setTheme(theme: WallpaperTheme, bitmap: android.graphics.Bitmap) {
+        glitchIntensity = theme.glitchIntensity
+        scanlineStrength = theme.scanlineStrength
+        loadTexture(bitmap)
+    }
+
+    private fun loadTexture(bitmap: android.graphics.Bitmap) {
+        if (textureId != 0) {
+            GLES20.glDeleteTextures(1, intArrayOf(textureId), 0)
+            textureId = 0
+        }
+
         val ids = IntArray(1)
         GLES20.glGenTextures(1, ids, 0)
         textureId = ids[0]
+        android.util.Log.d("Ethereal", "loadTexture: textureId=$textureId")
 
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
@@ -119,9 +133,7 @@ class BackgroundRenderer(private val context: Context) {
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
 
-        val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ethereal_bg)
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
-        bitmap.recycle()
     }
 
     fun onSurfaceChanged(width: Int, height: Int) {
@@ -130,6 +142,8 @@ class BackgroundRenderer(private val context: Context) {
     }
 
     fun draw(time: Float, xOffset: Float) {
+        if (textureId == 0) return
+
         GLES20.glUseProgram(programId)
 
         val posLoc = GLES20.glGetAttribLocation(programId, "aPosition")
@@ -137,6 +151,8 @@ class BackgroundRenderer(private val context: Context) {
         val timeLoc = GLES20.glGetUniformLocation(programId, "uTime")
         val xOffsetLoc = GLES20.glGetUniformLocation(programId, "uXOffset")
         val textureLoc = GLES20.glGetUniformLocation(programId, "uTexture")
+        val glitchLoc = GLES20.glGetUniformLocation(programId, "uGlitchIntensity")
+        val scanlineLoc = GLES20.glGetUniformLocation(programId, "uScanlineStrength")
 
         GLES20.glEnableVertexAttribArray(posLoc)
         GLES20.glVertexAttribPointer(posLoc, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer)
@@ -146,6 +162,8 @@ class BackgroundRenderer(private val context: Context) {
 
         GLES20.glUniform1f(timeLoc, time)
         GLES20.glUniform1f(xOffsetLoc, xOffset)
+        GLES20.glUniform1f(glitchLoc, glitchIntensity)
+        GLES20.glUniform1f(scanlineLoc, scanlineStrength)
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId)

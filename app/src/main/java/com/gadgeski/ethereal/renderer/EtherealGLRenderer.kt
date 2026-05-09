@@ -4,9 +4,10 @@ import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
+import com.gadgeski.ethereal.settings.WallpaperTheme
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
-
+import android.graphics.BitmapFactory
 class EtherealGLRenderer(private val context: Context) : GLSurfaceView.Renderer {
 
     private var screenWidth = 0
@@ -23,6 +24,8 @@ class EtherealGLRenderer(private val context: Context) : GLSurfaceView.Renderer 
 
     private var startTime = 0L
 
+    private var currentTheme = WallpaperTheme.GLITCH_SUNSET
+
     private lateinit var backgroundRenderer: BackgroundRenderer
     private lateinit var glitchRenderer: GlitchRenderer
     private lateinit var particleRenderer: ParticleRenderer
@@ -34,9 +37,12 @@ class EtherealGLRenderer(private val context: Context) : GLSurfaceView.Renderer 
 
         startTime = System.currentTimeMillis()
 
-        backgroundRenderer = BackgroundRenderer(context)
+        backgroundRenderer = BackgroundRenderer()
         glitchRenderer = GlitchRenderer()
         particleRenderer = ParticleRenderer()
+
+        // GLコンテキスト確立後に初期テーマを適用
+        applyTheme(currentTheme)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -54,21 +60,34 @@ class EtherealGLRenderer(private val context: Context) : GLSurfaceView.Renderer 
 
         val elapsed = (System.currentTimeMillis() - startTime) / 1000f
 
-        // 1) 背景テクスチャ + スキャンライン
         backgroundRenderer.draw(elapsed, xOffset)
-
-        // 2) グリッチオーバーレイ
         glitchRenderer.draw(elapsed, touchX, touchY, isTouching)
-
-        // 3) パーティクル
         particleRenderer.update(gravityX, gravityY, screenWidth, screenHeight)
         particleRenderer.draw(elapsed)
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun onVisibilityChanged(visible: Boolean) {
-        // GLSurfaceViewのonPause/onResumeで制御するため現状は空
+    fun setTheme(theme: WallpaperTheme, bitmap: android.graphics.Bitmap) {
+        currentTheme = theme
+        if (::backgroundRenderer.isInitialized) {
+            backgroundRenderer.setTheme(theme, bitmap)
+            glitchRenderer.setTheme(theme)
+            particleRenderer.setTheme(theme)
+        }
     }
+
+    private fun applyTheme(theme: WallpaperTheme) {
+        val bitmap = BitmapFactory.decodeResource(
+            context.resources,
+            theme.backgroundDrawableRes
+        ) ?: return
+        backgroundRenderer.setTheme(theme, bitmap)
+        glitchRenderer.setTheme(theme)
+        particleRenderer.setTheme(theme)
+        bitmap.recycle()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onVisibilityChanged(visible: Boolean) {}
 
     @Suppress("UNUSED_PARAMETER")
     fun onOffsetsChanged(xOffset: Float, yOffset: Float) {

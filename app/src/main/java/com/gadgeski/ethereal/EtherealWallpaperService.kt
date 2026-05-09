@@ -9,6 +9,9 @@ import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import com.gadgeski.ethereal.renderer.EtherealGLRenderer
+import com.gadgeski.ethereal.settings.SettingsActivity
+import com.gadgeski.ethereal.settings.WallpaperTheme
+import android.graphics.BitmapFactory
 
 class EtherealWallpaperService : WallpaperService() {
 
@@ -50,6 +53,7 @@ class EtherealWallpaperService : WallpaperService() {
 
             if (visible) {
                 glSurfaceView?.onResume()
+                loadAndApplyTheme()
                 accelerometer?.let {
                     sensorManager?.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
                 }
@@ -91,7 +95,23 @@ class EtherealWallpaperService : WallpaperService() {
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-        // WallpaperServiceのSurfaceHolderをGLSurfaceViewに橋渡しするクラス
+        private fun loadAndApplyTheme() {
+            val prefs = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
+            val theme = WallpaperTheme.fromName(
+                prefs.getString(SettingsActivity.KEY_SELECTED_THEME, WallpaperTheme.GLITCH_SUNSET.name)
+            )
+
+            // ビットマップデコードはメインスレッドで実行
+            val bitmap = BitmapFactory.decodeResource(resources, theme.backgroundDrawableRes)
+                ?: return
+
+            // GLスレッドにはデコード済みビットマップを渡す
+            glSurfaceView?.queueEvent {
+                renderer.setTheme(theme, bitmap)
+                bitmap.recycle()
+            }
+        }
+
         inner class WallpaperGLSurfaceView(
             context: android.content.Context
         ) : GLSurfaceView(context) {

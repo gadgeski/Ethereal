@@ -1,6 +1,7 @@
 package com.gadgeski.ethereal.renderer
 
 import android.opengl.GLES20
+import com.gadgeski.ethereal.settings.WallpaperTheme
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -8,6 +9,9 @@ import java.nio.FloatBuffer
 class GlitchRenderer {
 
     private var programId = 0
+    private var screenWidth = 1080f
+    private var screenHeight = 2400f
+    private var glitchIntensity = 0.6f
 
     private lateinit var vertexBuffer: FloatBuffer
     private lateinit var texCoordBuffer: FloatBuffer
@@ -43,6 +47,7 @@ class GlitchRenderer {
         uniform float uTouchX;
         uniform float uTouchY;
         uniform float uIsTouching;
+        uniform float uGlitchIntensity;
 
         float rand(vec2 co) {
             return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -57,7 +62,7 @@ class GlitchRenderer {
                 floor(uv.x * 30.0),
                 floor(uv.y * 50.0 + uTime * 5.0)
             ));
-            float block = step(0.85, blockNoise) * 0.15;
+            float block = step(0.85, blockNoise) * 0.15 * uGlitchIntensity;
 
             // タッチ時の波紋グリッチ
             float touchEffect = 0.0;
@@ -66,13 +71,14 @@ class GlitchRenderer {
                 float dy = uv.y - uTouchY;
                 float dist = sqrt(dx * dx + dy * dy);
                 touchEffect = sin(dist * 40.0 - uTime * 10.0) * 0.05
+                    * uGlitchIntensity
                     * (1.0 - smoothstep(0.0, 0.3, dist));
             }
 
             // 水平ラインのズレ
             float lineGlitch = trigger * step(0.9,
                 rand(vec2(floor(uv.y * 40.0), floor(uTime * 4.0)))
-            ) * 0.04;
+            ) * 0.04 * uGlitchIntensity;
 
             float glitchAlpha = clamp(block + abs(touchEffect) + lineGlitch, 0.0, 0.3);
 
@@ -80,11 +86,11 @@ class GlitchRenderer {
             float colorSeed = rand(vec2(floor(uTime * 3.0), floor(uv.y * 20.0)));
             vec3 glitchColor;
             if (colorSeed < 0.33) {
-                glitchColor = vec3(0.0, 1.0, 1.0); // シアン
+                glitchColor = vec3(0.0, 1.0, 1.0);
             } else if (colorSeed < 0.66) {
-                glitchColor = vec3(1.0, 0.0, 1.0); // マゼンタ
+                glitchColor = vec3(1.0, 0.0, 1.0);
             } else {
-                glitchColor = vec3(1.0, 1.0, 1.0); // ホワイト
+                glitchColor = vec3(1.0, 1.0, 1.0);
             }
 
             gl_FragColor = vec4(glitchColor, glitchAlpha);
@@ -119,8 +125,9 @@ class GlitchRenderer {
         }
     }
 
-    private var screenWidth = 1080f
-    private var screenHeight = 2400f
+    fun setTheme(theme: WallpaperTheme) {
+        glitchIntensity = theme.glitchIntensity
+    }
 
     @Suppress("UNUSED_PARAMETER")
     fun onSurfaceChanged(width: Int, height: Int) {
@@ -137,6 +144,7 @@ class GlitchRenderer {
         val touchXLoc = GLES20.glGetUniformLocation(programId, "uTouchX")
         val touchYLoc = GLES20.glGetUniformLocation(programId, "uTouchY")
         val isTouchingLoc = GLES20.glGetUniformLocation(programId, "uIsTouching")
+        val glitchLoc = GLES20.glGetUniformLocation(programId, "uGlitchIntensity")
 
         GLES20.glEnableVertexAttribArray(posLoc)
         GLES20.glVertexAttribPointer(posLoc, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer)
@@ -148,6 +156,7 @@ class GlitchRenderer {
         GLES20.glUniform1f(touchXLoc, touchX / screenWidth)
         GLES20.glUniform1f(touchYLoc, touchY / screenHeight)
         GLES20.glUniform1f(isTouchingLoc, if (isTouching) 1f else 0f)
+        GLES20.glUniform1f(glitchLoc, glitchIntensity)
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
 

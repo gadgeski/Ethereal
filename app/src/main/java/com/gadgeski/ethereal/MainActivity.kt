@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:function-naming")
+
 package com.gadgeski.ethereal
 
 import android.app.WallpaperManager
@@ -8,68 +10,119 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.gadgeski.ethereal.ui.theme.IgniterTheme
+import com.gadgeski.ethereal.settings.SettingsActivity
+import com.gadgeski.ethereal.settings.WallpaperTheme
+import com.gadgeski.ethereal.ui.theme.EtherealTheme
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        private const val PREFS_NAME = "ethereal_prefs"
+        private const val KEY_SELECTED_THEME = "selected_theme"
+    }
+
+    private var currentTheme by mutableStateOf(WallpaperTheme.GLITCH_SUNSET)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        loadSelectedTheme()
+
         setContent {
-            IgniterTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            EtherealTheme {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     MainScreen(
                         modifier = Modifier.padding(innerPadding),
-                        onSetWallpaper = {
-                            setWallpaper()
-                        }
+                        currentTheme = currentTheme,
+                        onSetWallpaper = { setWallpaper() },
+                        onOpenSettings = { openSettings() }
                     )
                 }
             }
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadSelectedTheme()
+    }
+
+    private fun loadSelectedTheme() {
+        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
+        currentTheme = WallpaperTheme.fromName(
+            prefs.getString(KEY_SELECTED_THEME, WallpaperTheme.GLITCH_SUNSET.name)
+        )
+    }
+
     private fun setWallpaper() {
         try {
-            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
-            intent.putExtra(
-                WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                ComponentName(this, EtherealWallpaperService::class.java)
-            )
+            val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
+                putExtra(
+                    WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                    ComponentName(this@MainActivity, EtherealWallpaperService::class.java)
+                )
+            }
             startActivity(intent)
         } catch (_: Exception) {
-            // Fallback for older devices or if specific action fails
             try {
                 val intent = Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER)
                 startActivity(intent)
             } catch (_: Exception) {
-                Toast.makeText(this, "Failed to open wallpaper picker", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Failed to open wallpaper picker",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+    }
+
+    private fun openSettings() {
+        startActivity(Intent(this, SettingsActivity::class.java))
     }
 }
 
 @Composable
 fun MainScreen(
+    currentTheme: WallpaperTheme,
     modifier: Modifier = Modifier,
-    onSetWallpaper: () -> Unit
+    onSetWallpaper: () -> Unit,
+    onOpenSettings: () -> Unit
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -77,13 +130,85 @@ fun MainScreen(
             text = "Ethereal Wallpaper",
             style = MaterialTheme.typography.headlineLarge
         )
-        Spacer(modifier = Modifier.height(16.dp))
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         Text(
-            text = "Tap the button below to activate the live wallpaper."
+            text = "Choose a theme and activate the live wallpaper.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = onSetWallpaper) {
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        CurrentThemeCard(theme = currentTheme)
+
+        Spacer(modifier = Modifier.height(28.dp))
+
+        Button(
+            onClick = onSetWallpaper,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = "Set Wallpaper")
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        OutlinedButton(
+            onClick = onOpenSettings,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "Open Settings")
+        }
+    }
+}
+
+@Composable
+private fun CurrentThemeCard(theme: WallpaperTheme) {
+    val thumbnailShape = RoundedCornerShape(16.dp)
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Text(
+                text = "Current Theme",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Image(
+                painter = painterResource(id = theme.thumbnailDrawableRes),
+                contentDescription = "${theme.displayName} preview",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+                    .clip(thumbnailShape),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = theme.displayName,
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = theme.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
@@ -91,7 +216,11 @@ fun MainScreen(
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    IgniterTheme {
-        MainScreen(onSetWallpaper = {})
+    EtherealTheme {
+        MainScreen(
+            currentTheme = WallpaperTheme.GLITCH_SUNSET,
+            onSetWallpaper = {},
+            onOpenSettings = {}
+        )
     }
 }
