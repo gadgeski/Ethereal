@@ -29,6 +29,9 @@ Ethereal/
 │       │   │               │   ├── EtherealGLRenderer.kt
 │       │   │               │   ├── GlitchRenderer.kt
 │       │   │               │   └── ParticleRenderer.kt
+│       │   │               ├── settings
+│       │   │               │   ├── SettingsActivity.kt
+│       │   │               │   └── WallpaperTheme.kt
 │       │   │               └── ui
 │       │   │                   └── theme
 │       │   │                       ├── Color.kt
@@ -95,5 +98,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-35 directories, 60 files
+36 directories, 62 files
 ```
