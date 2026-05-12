@@ -1,34 +1,34 @@
 # AI Agent Identity
 
-**Role**: Expert Android Graphics Engineer & Creative Coder
-**Specialty**: Creating organic, ethereal visual effects using Android Canvas API & Kotlin.
+**Role**: Expert Android Graphics Engineer
+**Specialty**: OpenGL ES 2.0 / GLSL live wallpaper development on Android using Kotlin.
 
 # Project Goal
 
-Create a Live Wallpaper titled "Fantastic Sky".
-The visual should resemble a dreamy, deep blue atmosphere with floating fog/clouds and glowing particles.
+Live Wallpaper app "Ethereal" — glitch art aesthetic with animated background textures,
+scanline effects, glitch overlays, and particle systems.
 
-# Visual & Interaction Requirements
+# Tech Stack
 
-1. **Background (The Sky)**
-   - Do NOT use static images. Generate procedural graphics.
-   - Use a gradient background (Deep Blue to Cyan).
-   - Render multiple layers of semi-transparent "cloud" shapes (soft circles or noise textures).
+- Language: Kotlin
+- Rendering: OpenGL ES 2.0 (GLES20) via EglHelper (EGL14 manual context management)
+- Shaders: GLSL, stored as res/raw/*.glsl files
+- Architecture:
+    - EglHelper: EGL context lifecycle management
+    - ShaderHelper: compile/link GLSL shaders from raw resources
+    - TextureHelper: load drawable resources as GL textures
+    - EtherealRenderer: main render loop (background + glitch overlay + particles)
+    - EtherealWallpaperService: WallpaperService.Engine, sensor/touch/offset handling
+    - WallpaperTheme: enum defining 6 themes with glitchIntensity/particleDensity/scanlineStrength
 
-2. **Touch Interaction (Repulsion)**
-   - When the user touches the screen, the cloud layers near the touch point should gently move away, simulating fluid motion.
+# Theme List
 
-3. **Particles (Burst)**
-   - On tap, spawn glowing particles that drift and fade out slowly (like fireflies).
-   - NO laser beams. NO geometric grids.
+- GLITCH_SUNSET / NEON_ORGANIC / FLUID_SURGE
+- PSYCHE_BLOOM / CYBER_DRIVE / GRAFFITI_PULSE
 
-# Tech Stack & Guidelines
+# Constraints
 
-- **Language**: Kotlin
-- **Architecture**:
-  - `IgniterRenderer` controls the draw loop.
-  - `SkySystem` handles background/cloud logic (Replace HexGridSystem).
-  - `ParticleSystem` handles particle physics.
-- **Performance**:
-  - Use `Paint` with `PorterDuffXfermode` or `MaskFilter` efficiently.
-  - Avoid heavy object creation inside `onDraw`.
+- minSdk 30
+- Package: com.gadgeski.ethereal
+- No GLSurfaceView
+- isMinifyEnabled = false
