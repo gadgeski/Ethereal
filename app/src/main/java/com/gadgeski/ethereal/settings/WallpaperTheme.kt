@@ -70,6 +70,16 @@ enum class WallpaperTheme(
         glitchIntensity = 0.7f,
         particleDensity = 0.7f,
         scanlineStrength = 0.04f
+    ),
+    
+    STATION_GLITCH(
+        displayName = "Station Glitch",
+        description = "A rain-soaked platform lost in analog interference.",
+        backgroundDrawableRes = R.drawable.bg_vivid_abstract,
+        thumbnailDrawableRes = R.drawable.bg_vivid_abstract,
+        glitchIntensity = 0.75f,
+        particleDensity = 0.5f,
+        scanlineStrength = 0.06f
     );
 
     companion object {
