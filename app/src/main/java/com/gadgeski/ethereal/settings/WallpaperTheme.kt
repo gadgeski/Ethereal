@@ -52,14 +52,14 @@ enum class WallpaperTheme(
         scanlineStrength = 0.02f
     ),
 
-    CYBER_DRIVE(
-        displayName = "Cyber Drive",
-        description = "Highway through a glitched neon city.",
-        backgroundDrawableRes = R.drawable.bg_glitch_highway,
-        thumbnailDrawableRes = R.drawable.bg_glitch_highway,
-        glitchIntensity = 0.9f,
-        particleDensity = 0.5f,
-        scanlineStrength = 0.06f
+    CHILL_AQUARIUM(
+        displayName = "Chill Aquarium",
+        description = "Deep blue waters glitching through glass and light.",
+        backgroundDrawableRes = R.drawable.bg_chill_aquarium,
+        thumbnailDrawableRes = R.drawable.bg_chill_aquarium,
+        glitchIntensity = 0.3f,
+        particleDensity = 0.3f,
+        scanlineStrength = 0.03f
     ),
 
     GRAFFITI_PULSE(

@@ -5,6 +5,8 @@ uniform float uTouchX;
 uniform float uTouchY;
 uniform float uIsTouching;
 uniform float uGlitchIntensity;
+uniform float uTouchReleaseTime;
+uniform float uCurrentTime;
 
 float rand(vec2 co) {
     return fract(sin(dot(co, vec2(12.9898, 78.233))) * 43758.5453);
@@ -50,5 +52,33 @@ void main() {
         glitchColor = vec3(1.0, 1.0, 1.0);
     }
 
-    gl_FragColor = vec4(glitchColor, glitchAlpha);
+    // フロストエフェクト（曇りガラスの跡）
+    float frostAlpha = 0.0;
+    float frostRadius = 0.12;
+
+    float dx = uv.x - uTouchX;
+    float dy = uv.y - uTouchY;
+    float dist = sqrt(dx * dx + dy * dy);
+
+    if (uIsTouching > 0.5) {
+        // タッチ中: タッチ位置周辺に薄い白い膜
+        frostAlpha = smoothstep(frostRadius, 0.0, dist) * 0.25;
+    } else if (uTouchReleaseTime > 0.0) {
+        // タッチ離した後: 経過時間に応じてフェードアウト
+        float elapsed = uCurrentTime - uTouchReleaseTime;
+        float fade = 1.0 - smoothstep(0.0, 2.0, elapsed);
+        frostAlpha = smoothstep(frostRadius, 0.0, dist) * 0.25 * fade;
+    }
+
+    // フロストのノイズ（すりガラス的なざらつき）
+    float frostNoise = rand(uv * 80.0 + uTime * 0.1) * 0.08;
+    frostAlpha = clamp(frostAlpha + frostNoise * frostAlpha, 0.0, 0.3);
+
+    vec3 frostColor = vec3(0.95, 0.97, 1.0); // 薄いシルバーホワイト
+
+    // グリッチとフロストを合成
+    vec3 finalColor = mix(glitchColor, frostColor, frostAlpha > glitchAlpha ? 1.0 : 0.0);
+    float finalAlpha = clamp(glitchAlpha + frostAlpha, 0.0, 0.35);
+
+    gl_FragColor = vec4(finalColor, finalAlpha);
 }
