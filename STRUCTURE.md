@@ -23,12 +23,12 @@ Ethereal/
 │       │   │               ├── EtherealApp.kt
 │       │   │               ├── EtherealWallpaperService.kt
 │       │   │               ├── MainActivity.kt
-│       │   │               ├── model
+│       │   │               ├── opengl
+│       │   │               │   ├── EglHelper.kt
+│       │   │               │   ├── ShaderHelper.kt
+│       │   │               │   └── TextureHelper.kt
 │       │   │               ├── renderer
-│       │   │               │   ├── BackgroundRenderer.kt
-│       │   │               │   ├── EtherealGLRenderer.kt
-│       │   │               │   ├── GlitchRenderer.kt
-│       │   │               │   └── ParticleRenderer.kt
+│       │   │               │   └── EtherealGLRenderer.kt
 │       │   │               ├── settings
 │       │   │               │   ├── SettingsActivity.kt
 │       │   │               │   └── WallpaperTheme.kt
@@ -39,6 +39,7 @@ Ethereal/
 │       │   │                       └── Type.kt
 │       │   └── res
 │       │       ├── drawable
+│       │       │   ├── bg_chill_aquarium.webp
 │       │       │   ├── bg_flower_comical_abstract.webp
 │       │       │   ├── bg_glitch_highway.webp
 │       │       │   ├── bg_graffiti_abstract.webp
@@ -72,6 +73,13 @@ Ethereal/
 │       │       │   ├── ic_launcher.webp
 │       │       │   ├── ic_launcher_foreground.webp
 │       │       │   └── ic_launcher_round.webp
+│       │       ├── raw
+│       │       │   ├── bg_fragment.glsl
+│       │       │   ├── bg_vertex.glsl
+│       │       │   ├── glitch_fragment.glsl
+│       │       │   ├── glitch_vertex.glsl
+│       │       │   ├── particle_fragment.glsl
+│       │       │   └── particle_vertex.glsl
 │       │       ├── values
 │       │       │   ├── colors.xml
 │       │       │   ├── strings.xml
@@ -98,5 +106,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-36 directories, 62 files
+37 directories, 69 files
 ```
