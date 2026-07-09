@@ -41,7 +41,6 @@ Ethereal/
 │       │       ├── drawable
 │       │       │   ├── bg_chill_aquarium.webp
 │       │       │   ├── bg_flower_comical_abstract.webp
-│       │       │   ├── bg_glitch_highway.webp
 │       │       │   ├── bg_graffiti_abstract.webp
 │       │       │   ├── bg_vivid_abstract.webp
 │       │       │   ├── bg_wavy_abstract.webp
@@ -106,5 +105,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 69 files
+37 directories, 68 files
 ```
