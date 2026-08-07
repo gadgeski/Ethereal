@@ -12,49 +12,29 @@ enum class WallpaperTheme(
     val particleDensity: Float,
     val scanlineStrength: Float
 ) {
-    GLITCH_SUNSET(
-        displayName = "Glitch Sunset",
-        description = "Warm sunset sky fractured by analog glitch.",
-        backgroundDrawableRes = R.drawable.ethereal_bg,
-        thumbnailDrawableRes = R.drawable.ethereal_bg,
+    AZURE_SKY(
+        displayName = "Azure Sky",
+        description = "A fantastical sky of towering clouds and blue light.",
+        backgroundDrawableRes = R.drawable.bg_azure_sky,
+        thumbnailDrawableRes = R.drawable.bg_azure_sky,
         glitchIntensity = 0.6f,
         particleDensity = 0.4f,
         scanlineStrength = 0.04f
     ),
 
-    NEON_ORGANIC(
-        displayName = "Neon Organic",
-        description = "Dark wood grain alive with neon circuit light.",
-        backgroundDrawableRes = R.drawable.bg_wood_grain_abstract,
-        thumbnailDrawableRes = R.drawable.bg_wood_grain_abstract,
-        glitchIntensity = 0.8f,
-        particleDensity = 0.6f,
-        scanlineStrength = 0.05f
-    ),
-
-    FLUID_SURGE(
-        displayName = "Fluid Surge",
-        description = "Magenta flow fields surging with electric energy.",
-        backgroundDrawableRes = R.drawable.bg_wavy_abstract,
-        thumbnailDrawableRes = R.drawable.bg_wavy_abstract,
-        glitchIntensity = 0.5f,
-        particleDensity = 0.8f,
-        scanlineStrength = 0.03f
-    ),
-
-    PSYCHE_BLOOM(
-        displayName = "Psyche Bloom",
-        description = "Psychedelic graffiti flower with chromatic chaos.",
-        backgroundDrawableRes = R.drawable.bg_flower_comical_abstract,
-        thumbnailDrawableRes = R.drawable.bg_flower_comical_abstract,
-        glitchIntensity = 1.0f,
-        particleDensity = 1.0f,
+    RAINY_WINDOW(
+        displayName = "Rainy Window",
+        description = "A doodle left on a fogged window on a rainy day.",
+        backgroundDrawableRes = R.drawable.bg_rainy_window,
+        thumbnailDrawableRes = R.drawable.bg_rainy_window,
+        glitchIntensity = 0.4f,
+        particleDensity = 0.3f,
         scanlineStrength = 0.02f
     ),
 
     CHILL_AQUARIUM(
         displayName = "Chill Aquarium",
-        description = "Deep blue waters glitching through glass and light.",
+        description = "Deep blue waters glowing behind curved glass.",
         backgroundDrawableRes = R.drawable.bg_chill_aquarium,
         thumbnailDrawableRes = R.drawable.bg_chill_aquarium,
         glitchIntensity = 0.3f,
@@ -62,29 +42,49 @@ enum class WallpaperTheme(
         scanlineStrength = 0.03f
     ),
 
-    GRAFFITI_PULSE(
-        displayName = "Graffiti Pulse",
-        description = "Street art exploding with glitch and color.",
-        backgroundDrawableRes = R.drawable.bg_graffiti_abstract,
-        thumbnailDrawableRes = R.drawable.bg_graffiti_abstract,
-        glitchIntensity = 0.7f,
-        particleDensity = 0.7f,
-        scanlineStrength = 0.04f
+    INDIGO_GRAIN(
+        displayName = "Indigo Grain",
+        description = "Organic wood grain flowing in deep indigo.",
+        backgroundDrawableRes = R.drawable.bg_indigo_grain,
+        thumbnailDrawableRes = R.drawable.bg_indigo_grain,
+        glitchIntensity = 0.5f,
+        particleDensity = 0.4f,
+        scanlineStrength = 0.05f
     ),
-    
-    STATION_GLITCH(
-        displayName = "Station Glitch",
-        description = "A rain-soaked platform lost in analog interference.",
-        backgroundDrawableRes = R.drawable.bg_vivid_abstract,
-        thumbnailDrawableRes = R.drawable.bg_vivid_abstract,
+
+    COBALT_PAINT(
+        displayName = "Cobalt Paint",
+        description = "Cobalt strokes splashed across a dark canvas.",
+        backgroundDrawableRes = R.drawable.bg_cobalt_paint,
+        thumbnailDrawableRes = R.drawable.bg_cobalt_paint,
+        glitchIntensity = 0.5f,
+        particleDensity = 0.6f,
+        scanlineStrength = 0.03f
+    ),
+
+    HALFTONE_CURVE(
+        displayName = "Halftone Curve",
+        description = "Vivid halftone dots sweeping through blue curves.",
+        backgroundDrawableRes = R.drawable.bg_halftone_curve,
+        thumbnailDrawableRes = R.drawable.bg_halftone_curve,
         glitchIntensity = 0.75f,
         particleDensity = 0.5f,
         scanlineStrength = 0.06f
+    ),
+
+    MINT_WAVE(
+        displayName = "Mint Wave",
+        description = "Soft mint curves drifting over a midnight field.",
+        backgroundDrawableRes = R.drawable.bg_mint_wave,
+        thumbnailDrawableRes = R.drawable.bg_mint_wave,
+        glitchIntensity = 0.3f,
+        particleDensity = 0.3f,
+        scanlineStrength = 0.02f
     );
 
     companion object {
         fun fromName(name: String?): WallpaperTheme {
-            return entries.firstOrNull { it.name == name } ?: GLITCH_SUNSET
+            return entries.firstOrNull { it.name == name } ?: AZURE_SKY
         }
     }
 }

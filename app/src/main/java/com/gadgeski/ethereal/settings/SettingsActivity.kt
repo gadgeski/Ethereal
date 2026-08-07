@@ -59,7 +59,7 @@ class SettingsActivity : ComponentActivity() {
 
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         val initialTheme = WallpaperTheme.fromName(
-            prefs.getString(KEY_SELECTED_THEME, WallpaperTheme.GLITCH_SUNSET.name)
+            prefs.getString(KEY_SELECTED_THEME, WallpaperTheme.AZURE_SKY.name)
         )
 
         setContent {

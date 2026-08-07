@@ -27,7 +27,7 @@ class EtherealGLRenderer(private val context: Context) {
     private var xOffset = 0f
 
     private var startTime = 0L
-    private var currentTheme = WallpaperTheme.GLITCH_SUNSET
+    private var currentTheme = WallpaperTheme.AZURE_SKY
 
     private var bgProgram = 0
     private var glitchProgram = 0

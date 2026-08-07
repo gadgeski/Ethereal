@@ -24,6 +24,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
+import kotlin.time.Duration.Companion.milliseconds
 
 class EtherealWallpaperService : WallpaperService() {
 
@@ -57,7 +58,7 @@ class EtherealWallpaperService : WallpaperService() {
                 if (key == SettingsActivity.KEY_SELECTED_THEME) {
                     val themeName = sharedPreferences.getString(
                         SettingsActivity.KEY_SELECTED_THEME,
-                        WallpaperTheme.GLITCH_SUNSET.name
+                        WallpaperTheme.AZURE_SKY.name
                     )
                     val theme = WallpaperTheme.fromName(themeName)
 
@@ -92,7 +93,7 @@ class EtherealWallpaperService : WallpaperService() {
 
                 val themeName = prefs.getString(
                     SettingsActivity.KEY_SELECTED_THEME,
-                    WallpaperTheme.GLITCH_SUNSET.name
+                    WallpaperTheme.AZURE_SKY.name
                 )
                 renderer.setTheme(WallpaperTheme.fromName(themeName))
 
@@ -222,7 +223,7 @@ class EtherealWallpaperService : WallpaperService() {
 
                     val frameElapsedMs = SystemClock.elapsedRealtime() - frameStartMs
                     val sleepMs = (16L - frameElapsedMs).coerceAtLeast(0L)
-                    delay(sleepMs)
+                    delay(sleepMs.milliseconds)
                 }
             }
         }

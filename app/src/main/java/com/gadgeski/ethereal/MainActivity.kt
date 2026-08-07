@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
         private const val KEY_SELECTED_THEME = "selected_theme"
     }
 
-    private var currentTheme by mutableStateOf(WallpaperTheme.GLITCH_SUNSET)
+    private var currentTheme by mutableStateOf(WallpaperTheme.AZURE_SKY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
     private fun loadSelectedTheme() {
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         currentTheme = WallpaperTheme.fromName(
-            prefs.getString(KEY_SELECTED_THEME, WallpaperTheme.GLITCH_SUNSET.name)
+            prefs.getString(KEY_SELECTED_THEME, WallpaperTheme.AZURE_SKY.name)
         )
     }
 
@@ -218,7 +218,7 @@ private fun CurrentThemeCard(theme: WallpaperTheme) {
 fun MainScreenPreview() {
     EtherealTheme {
         MainScreen(
-            currentTheme = WallpaperTheme.GLITCH_SUNSET,
+            currentTheme = WallpaperTheme.AZURE_SKY,
             onSetWallpaper = {},
             onOpenSettings = {}
         )
