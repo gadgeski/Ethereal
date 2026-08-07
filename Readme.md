@@ -1,90 +1,103 @@
-# Ethereal - Live Wallpaper Engine
+# Ethereal — Live Wallpaper Engine
 
-> **"Touch the Void."**
+> **"Touch the Glitch."**
 >
-> A programmable artwork that renders a living, breathing ethereal world directly on your Android home screen.
+> An OpenGL ES live wallpaper that renders lo-fi glitch aesthetics in real time on your Android home screen.
 
 ## 📱 Overview
 
-**Ethereal** is a high-performance Android Live Wallpaper application built entirely with **Kotlin** and native **Android Canvas API**.
+**Ethereal** is an Android live wallpaper built with **Kotlin** and **OpenGL ES 2.0**.
 
-Unlike typical video-loop wallpapers, Ethereal renders every frame in real-time, simulating fluid dynamics for fog, particle physics for light, and multi-layer parallax for depth. It transforms the static home screen into an immersive "DailySync" experience—calm, intelligent, and reactive.
+Rather than looping a video, every frame is rendered on the GPU through custom GLSL shaders. Scanlines, sporadic glitch bursts, and drifting particles are layered over curated background artwork to create a calm, lo-fi atmosphere that reacts to touch and device motion.
 
 ## ✨ Key Features
 
-### 1. Multi-Layer Parallax Depth
+### 1. Three-Layer GPU Rendering
 
-Implemented a custom parallax engine that moves layers at different velocities relative to the scroll offset, creating a genuine 3D illusion.
+Each frame composites three independent shader programs.
 
-- **Background (Sky):** Moves at **30%** speed (Factor 0.3) for stability.
+- **Background:** Texture sampling with scanlines, RGB channel shift, and horizontal band displacement.
+- **Glitch Overlay:** Block noise, scanline tearing, and touch-driven ripple distortion.
+- **Particles:** `GL_POINTS` batched by color, with gravity-driven motion.
 
-- **Midground (Fog):** Moves at **50%** speed (Factor 0.5) with seamless wrap-around logic.
+### 2. Per-Theme Motion Profiles
 
-- **Foreground (Particles):** Moves at **120%** speed (Factor 1.2), creating a dynamic "pop-out" effect.
+Every theme carries its own parameters, so the same shaders produce distinctly different moods.
 
+- `glitchIntensity` — strength of glitch and RGB shift
+- `particleDensity` — spawn rate and burst size
+- `scanlineStrength` — scanline contrast
 
-### 2. Physics-Based Interaction
+Calm themes such as *Chill Aquarium* stay near 0.3, while *Halftone Curve* pushes to 0.75.
 
-The fog isn't just an animation; it's a simulation.
+### 3. Sensor & Touch Reactivity
 
-- **Fluid Repulsion:** Fog particles react to touch input, gently parting ways based on vector calculations.
-
-- **Inertia & Damping:** Objects carry velocity and slow down naturally due to simulated air resistance (damping factor 0.92).
-
-
-### 3. Reactive Particle System
-
-- **Touch Ignition:** Spawns bursts of light particles exactly at the touch coordinates (corrected for parallax shift).
-
-- **Dynamic Pooling:** Manages a pool of **2,000+ particles** efficiently, ensuring zero frame drops even during intense interaction.
-
+- **Touch Ignition:** Particle bursts spawn at the touch point; the glitch shader adds a localized ripple.
+- **Accelerometer Drift:** Particles respond to device tilt through the gravity vector.
+- **Parallax:** Home screen scroll offsets shift the background texture.
 
 ## 🛠 Technical Highlights
 
-- **Pure Canvas Rendering:** No heavy game engines (Unity/Unreal) or OpenGL dependencies. Lightweight and battery-efficient.
-
-- **Memory Optimization:** Uses a single `Bitmap` for the background and recycles objects to prevent Garbage Collection (GC) pauses.
-
-- **Mathematical Precision:** - Custom coordinate transformation logic to map screen touch points to the parallax-shifted world.
-
-    - `Canvas.scale` and `translate` optimization to prevent background clipping on wide scrolls.
-
+- **Manual EGL Management:** `WallpaperService.Engine` cannot host a `GLSurfaceView`, so the EGL14 context, surface, and lifecycle are handled directly.
+- **Single GL Thread:** A dedicated single-thread dispatcher serializes all GL work — context creation, texture upload, draw calls, and teardown — through coroutines.
+- **Shaders as Resources:** GLSL lives in `res/raw/*.glsl` and is compiled at theme-switch time, keeping rendering logic out of Kotlin.
+- **Live Theme Switching:** A `SharedPreferences` listener applies theme changes the moment they are selected, with no service restart.
 
 ## 📂 Architecture
 
-The project follows a clean separation of concerns, ensuring maintainability and scalability.
-
-```
+```text
 com.gadgeski.ethereal
-├── EtherealWallpaperService.kt  # Entry Point (Service)
-└── renderer/
-    ├── EtherealRenderer.kt      # Main Render Loop & State Manager
-    ├── SkySystem.kt             # Background Layer (Bitmap & Parallax)
-    ├── FogSystem.kt             # Physics Layer (Repulsion Logic)
-    └── ParticleSystem.kt        # Foreground Layer (Pooling & Ignition)
+├── EtherealWallpaperService.kt   # Service, EGL lifecycle, draw loop
+├── MainActivity.kt               # Entry screen
+├── opengl/
+│   ├── EglHelper.kt              # EGL14 context & surface management
+│   ├── ShaderHelper.kt           # GLSL compile & link
+│   └── TextureHelper.kt          # Drawable → GL texture
+├── renderer/
+│   └── EtherealGLRenderer.kt     # Three-layer render pipeline
+└── settings/
+    ├── WallpaperTheme.kt         # Theme definitions & parameters
+    └── SettingsActivity.kt       # Theme picker (Compose)
 ```
+
+```text
+res/raw/
+├── bg_vertex.glsl / bg_fragment.glsl
+├── glitch_vertex.glsl / glitch_fragment.glsl
+└── particle_vertex.glsl / particle_fragment.glsl
+```
+
+## 🎨 Themes
+
+| Theme | Mood |
+|---|---|
+| Azure Sky | Towering clouds in blue light |
+| Rainy Window | A doodle on fogged glass |
+| Chill Aquarium | Deep water behind curved glass |
+| Indigo Grain | Organic grain in deep indigo |
+| Cobalt Paint | Cobalt strokes on dark canvas |
+| Halftone Curve | Vivid dots through blue curves |
+| Mint Wave | Mint curves over a midnight field |
 
 ## 🚀 Getting Started
 
 1. Clone the repository.
 
-    ```
-    git clone [https://github.com/gadgeski/Ethereal.git](https://github.com/gadgeski/Ethereal.git)
-    ```
+   ```bash
+   git clone https://github.com/gadgeski/Ethereal.git
+   ```
 
 2. Open in **Android Studio**.
+3. Build and run on a physical device (live wallpapers are unreliable on emulators).
+4. Select **Ethereal** from the wallpaper picker.
 
-3. Build and Run on a physical device (Emulators may not support Live Wallpapers fully).
+## 🎭 Design Philosophy
 
-4. Select "Ethereal" from the Wallpaper picker.
+- **Aesthetic:** Lo-fi / glitch — noise as texture, never as spectacle.
+- **Palette:** Deep blue, cobalt, cyan, with mint and magenta accents.
+- **Principle:** Glitch is seasoning. If it announces itself, the atmosphere is already broken.
 
-## 🎨 Design Philosophy
+## 🔧 Requirements
 
-- **Mode:** DailySync (Lifestyle/Cafe)
-
-- **Palette:** Deep Purple, Sunset Orange, Cyan & White Glitch accents.
-
-- **Concept:** A window to a digital ether that bridges the gap between the organic and the synthetic.
-
-
-Designed & Engineered by **Gemini customized with Gem**.
+- Android 11 (API 30) or higher
+- OpenGL ES 2.0 support
