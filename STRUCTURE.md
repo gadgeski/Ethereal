@@ -39,13 +39,13 @@ Ethereal/
 │       │   │                       └── Type.kt
 │       │   └── res
 │       │       ├── drawable
+│       │       │   ├── bg_azure_sky.webp
 │       │       │   ├── bg_chill_aquarium.webp
-│       │       │   ├── bg_flower_comical_abstract.webp
-│       │       │   ├── bg_graffiti_abstract.webp
-│       │       │   ├── bg_vivid_abstract.webp
-│       │       │   ├── bg_wavy_abstract.webp
-│       │       │   ├── bg_wood_grain_abstract.webp
-│       │       │   ├── ethereal_bg.webp
+│       │       │   ├── bg_cobalt_paint.webp
+│       │       │   ├── bg_halftone_curve.webp
+│       │       │   ├── bg_indigo_grain.webp
+│       │       │   ├── bg_mint_wave.webp
+│       │       │   ├── bg_rainy_window.webp
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
 │       │       ├── mipmap-anydpi
