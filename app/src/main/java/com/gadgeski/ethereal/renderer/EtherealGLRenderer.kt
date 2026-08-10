@@ -29,6 +29,8 @@ class EtherealGLRenderer(private val context: Context) {
     private var startTime = 0L
     private var currentTheme = WallpaperTheme.AZURE_SKY
 
+    private var scanStartMs = -1L
+
     private var bgProgram = 0
     private var glitchProgram = 0
     private var particleProgram = 0
@@ -122,6 +124,10 @@ class EtherealGLRenderer(private val context: Context) {
         particles.clear()
     }
 
+    fun triggerChargeScan() {
+        scanStartMs = System.currentTimeMillis()
+    }
+
     // -- Background Drawing --
     private fun drawBackground(time: Float) {
         if (bgProgram == 0 || bgTextureId == 0) return
@@ -172,6 +178,7 @@ class EtherealGLRenderer(private val context: Context) {
         val touchYLoc = GLES20.glGetUniformLocation(glitchProgram, "uTouchY")
         val isTouchingLoc = GLES20.glGetUniformLocation(glitchProgram, "uIsTouching")
         val glitchLoc = GLES20.glGetUniformLocation(glitchProgram, "uGlitchIntensity")
+        val scanLoc = GLES20.glGetUniformLocation(glitchProgram, "uScanProgress")
 
         quadBuffer.position(0)
         GLES20.glEnableVertexAttribArray(posLoc)
@@ -182,17 +189,28 @@ class EtherealGLRenderer(private val context: Context) {
         GLES20.glVertexAttribPointer(texLoc, 2, GLES20.GL_FLOAT, false, 0, texCoordBuffer)
 
         GLES20.glUniform1f(timeLoc, time)
-        val sW = if(screenWidth > 0) screenWidth.toFloat() else 1f
-        val sH = if(screenHeight > 0) screenHeight.toFloat() else 1f
+        val sW = if (screenWidth > 0) screenWidth.toFloat() else 1f
+        val sH = if (screenHeight > 0) screenHeight.toFloat() else 1f
         GLES20.glUniform1f(touchXLoc, touchX / sW)
         GLES20.glUniform1f(touchYLoc, touchY / sH)
         GLES20.glUniform1f(isTouchingLoc, if (isTouching) 1f else 0f)
         GLES20.glUniform1f(glitchLoc, currentTheme.glitchIntensity)
+        GLES20.glUniform1f(scanLoc, computeScanProgress())
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
 
         GLES20.glDisableVertexAttribArray(posLoc)
         GLES20.glDisableVertexAttribArray(texLoc)
+    }
+
+    private fun computeScanProgress(): Float {
+        if (scanStartMs < 0L) return -1f
+        val elapsed = System.currentTimeMillis() - scanStartMs
+        if (elapsed > SCAN_DURATION_MS) {
+            scanStartMs = -1L
+            return -1f
+        }
+        return elapsed.toFloat() / SCAN_DURATION_MS
     }
 
     // -- Particles logic --
@@ -342,5 +360,9 @@ class EtherealGLRenderer(private val context: Context) {
         if (bgProgram != 0) { GLES20.glDeleteProgram(bgProgram); bgProgram = 0 }
         if (glitchProgram != 0) { GLES20.glDeleteProgram(glitchProgram); glitchProgram = 0 }
         if (particleProgram != 0) { GLES20.glDeleteProgram(particleProgram); particleProgram = 0 }
+    }
+
+    private companion object {
+        const val SCAN_DURATION_MS = 2000L
     }
 }

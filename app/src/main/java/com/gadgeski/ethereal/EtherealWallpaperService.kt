@@ -25,6 +25,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
 import kotlin.time.Duration.Companion.milliseconds
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 
 class EtherealWallpaperService : WallpaperService() {
 
@@ -69,6 +73,15 @@ class EtherealWallpaperService : WallpaperService() {
                     }
                 }
             }
+        private val powerReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == Intent.ACTION_POWER_CONNECTED) {
+                    scope.launch {
+                        renderer.triggerChargeScan()
+                    }
+                }
+            }
+        }
 
         override fun onCreate(surfaceHolder: SurfaceHolder?) {
             super.onCreate(surfaceHolder)
@@ -76,6 +89,8 @@ class EtherealWallpaperService : WallpaperService() {
 
             prefs = applicationContext.getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
             prefs.registerOnSharedPreferenceChangeListener(prefsListener)
+
+            registerReceiver(powerReceiver, IntentFilter(Intent.ACTION_POWER_CONNECTED))
 
             sensorManager = getSystemService(SENSOR_SERVICE) as? SensorManager
             accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -170,6 +185,12 @@ class EtherealWallpaperService : WallpaperService() {
             super.onDestroy()
             prefs.unregisterOnSharedPreferenceChangeListener(prefsListener)
             sensorManager?.unregisterListener(this)
+
+            try {
+                unregisterReceiver(powerReceiver)
+            } catch (_: IllegalArgumentException) {
+                // 未登録の場合は無視
+            }
 
             stopDrawingLoop()
             surfaceReady = false
