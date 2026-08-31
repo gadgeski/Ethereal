@@ -80,6 +80,26 @@ enum class WallpaperTheme(
         glitchIntensity = 0.3f,
         particleDensity = 0.3f,
         scanlineStrength = 0.02f
+    ),
+
+    MONO_FRACTURE(
+        displayName = "Mono Fracture",
+        description = "A quiet room fractured into stepped monochrome blocks.",
+        backgroundDrawableRes = R.drawable.bg_mono_fracture,
+        thumbnailDrawableRes = R.drawable.bg_mono_fracture,
+        glitchIntensity = 0.35f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.01f
+    ),
+
+    AZURE_FRACTURE(
+        displayName = "Azure Fracture",
+        description = "An open sky fractured into stepped blocks of blue.",
+        backgroundDrawableRes = R.drawable.bg_azure_fracture,
+        thumbnailDrawableRes = R.drawable.bg_azure_fracture,
+        glitchIntensity = 0.35f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.01f
     );
 
     companion object {
