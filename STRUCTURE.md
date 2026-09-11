@@ -39,12 +39,14 @@ Ethereal/
 │       │   │                       └── Type.kt
 │       │   └── res
 │       │       ├── drawable
+│       │       │   ├── bg_azure_fracture.webp
 │       │       │   ├── bg_azure_sky.webp
 │       │       │   ├── bg_chill_aquarium.webp
 │       │       │   ├── bg_cobalt_paint.webp
 │       │       │   ├── bg_halftone_curve.webp
 │       │       │   ├── bg_indigo_grain.webp
 │       │       │   ├── bg_mint_wave.webp
+│       │       │   ├── bg_mono_fracture.webp
 │       │       │   ├── bg_rainy_window.webp
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
@@ -55,22 +57,27 @@ Ethereal/
 │       │       ├── mipmap-hdpi
 │       │       │   ├── ic_launcher.webp
 │       │       │   ├── ic_launcher_foreground.webp
+│       │       │   ├── ic_launcher_monochrome.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-mdpi
 │       │       │   ├── ic_launcher.webp
 │       │       │   ├── ic_launcher_foreground.webp
+│       │       │   ├── ic_launcher_monochrome.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xhdpi
 │       │       │   ├── ic_launcher.webp
 │       │       │   ├── ic_launcher_foreground.webp
+│       │       │   ├── ic_launcher_monochrome.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xxhdpi
 │       │       │   ├── ic_launcher.webp
 │       │       │   ├── ic_launcher_foreground.webp
+│       │       │   ├── ic_launcher_monochrome.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── mipmap-xxxhdpi
 │       │       │   ├── ic_launcher.webp
 │       │       │   ├── ic_launcher_foreground.webp
+│       │       │   ├── ic_launcher_monochrome.webp
 │       │       │   └── ic_launcher_round.webp
 │       │       ├── raw
 │       │       │   ├── bg_fragment.glsl
@@ -105,5 +112,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 68 files
+37 directories, 75 files
 ```
