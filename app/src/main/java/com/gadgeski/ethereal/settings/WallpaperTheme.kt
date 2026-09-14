@@ -100,6 +100,46 @@ enum class WallpaperTheme(
         glitchIntensity = 0.35f,
         particleDensity = 0.2f,
         scanlineStrength = 0.01f
+    ),
+
+    QUIET_STREET(
+        displayName = "Quiet Street",
+        description = "A residential street after dark, lit only by a few windows.",
+        backgroundDrawableRes = R.drawable.bg_quiet_street,
+        thumbnailDrawableRes = R.drawable.bg_quiet_street,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    DISTANT_LIGHTS(
+        displayName = "Distant Lights",
+        description = "A town seen from above, long after sunset.",
+        backgroundDrawableRes = R.drawable.bg_distant_lights,
+        thumbnailDrawableRes = R.drawable.bg_distant_lights,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    WINDOW_VIGIL(
+        displayName = "Window Vigil",
+        description = "The town after dark, seen through a window frame.",
+        backgroundDrawableRes = R.drawable.bg_window_vigil,
+        thumbnailDrawableRes = R.drawable.bg_window_vigil,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    LONE_LAMP(
+        displayName = "Lone Lamp",
+        description = "A single street lamp holding back the dark.",
+        backgroundDrawableRes = R.drawable.bg_lone_lamp,
+        thumbnailDrawableRes = R.drawable.bg_lone_lamp,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
     );
 
     companion object {
