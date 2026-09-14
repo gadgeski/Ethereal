@@ -13,7 +13,8 @@ void main() {
     vec2 uv = vTexCoord;
 
     // スキャンライン
-    float scanline = sin(uv.y * 800.0) * uScanlineStrength;
+    float sl = sin(uv.y * 800.0) * 0.5 + 0.5;
+    float scanline = -pow(sl, 3.0) * uScanlineStrength;
 
     // 散発的グリッチ
     float glitchTrigger = step(0.92, rand(vec2(floor(uTime * 3.0), 0.0)));
