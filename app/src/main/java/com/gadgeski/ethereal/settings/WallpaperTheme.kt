@@ -141,7 +141,7 @@ enum class WallpaperTheme(
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
     ),
-    
+
     CROSSROAD_DUSK(
         displayName = "Crossroad Dusk",
         description = "An empty intersection under a single lamp.",
@@ -167,6 +167,26 @@ enum class WallpaperTheme(
         description = "String lights on a balcony, facing the neighbors' roofs.",
         backgroundDrawableRes = R.drawable.bg_balcony_night,
         thumbnailDrawableRes = R.drawable.bg_balcony_night,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    LAST_TRAIN(
+        displayName = "Last Train",
+        description = "Hillside houses passing by the window of a night train.",
+        backgroundDrawableRes = R.drawable.bg_last_train,
+        thumbnailDrawableRes = R.drawable.bg_last_train,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    AFTER_RAIN(
+        displayName = "After Rain",
+        description = "A wet path holding what little light is left.",
+        backgroundDrawableRes = R.drawable.bg_after_rain,
+        thumbnailDrawableRes = R.drawable.bg_after_rain,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
