@@ -140,6 +140,36 @@ enum class WallpaperTheme(
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
+    ),
+    
+    CROSSROAD_DUSK(
+        displayName = "Crossroad Dusk",
+        description = "An empty intersection under a single lamp.",
+        backgroundDrawableRes = R.drawable.bg_crossroad_dusk,
+        thumbnailDrawableRes = R.drawable.bg_crossroad_dusk,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    HILLSIDE_VIEW(
+        displayName = "Hillside View",
+        description = "The valley spread out below a hillside stairway.",
+        backgroundDrawableRes = R.drawable.bg_hillside_view,
+        thumbnailDrawableRes = R.drawable.bg_hillside_view,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    BALCONY_NIGHT(
+        displayName = "Balcony Night",
+        description = "String lights on a balcony, facing the neighbors' roofs.",
+        backgroundDrawableRes = R.drawable.bg_balcony_night,
+        thumbnailDrawableRes = R.drawable.bg_balcony_night,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
     );
 
     companion object {
