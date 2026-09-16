@@ -191,7 +191,7 @@ enum class WallpaperTheme(
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
     ),
-    
+
     CANYON_SKY(
         displayName = "Canyon Sky",
         description = "A strip of sky between towers.",
@@ -209,6 +209,16 @@ enum class WallpaperTheme(
         thumbnailDrawableRes = R.drawable.bg_fog_valley,
         glitchIntensity = 0.15f,
         particleDensity = 0.2f,
+        scanlineStrength = 0.02f
+    ),
+    
+    STATION_BELOW(
+        displayName = "Station Below",
+        description = "Rails curving through a town, seen from the hill above.",
+        backgroundDrawableRes = R.drawable.bg_station_below,
+        thumbnailDrawableRes = R.drawable.bg_station_below,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
         scanlineStrength = 0.02f
     );
 
