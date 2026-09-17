@@ -211,7 +211,7 @@ enum class WallpaperTheme(
         particleDensity = 0.2f,
         scanlineStrength = 0.02f
     ),
-    
+
     STATION_BELOW(
         displayName = "Station Below",
         description = "Rails curving through a town, seen from the hill above.",
@@ -220,6 +220,26 @@ enum class WallpaperTheme(
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
+    ),
+
+    CONDENSATION(
+        displayName = "Condensation",
+        description = "City lights dissolving behind a fogged pane.",
+        backgroundDrawableRes = R.drawable.bg_condensation,
+        thumbnailDrawableRes = R.drawable.bg_condensation,
+        glitchIntensity = 0.15f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.02f
+    ),
+    
+    LIGHT_LEAK(
+        displayName = "Light Leak",
+        description = "An alley of fire escapes, burned by stray film light.",
+        backgroundDrawableRes = R.drawable.bg_light_leak,
+        thumbnailDrawableRes = R.drawable.bg_light_leak,
+        glitchIntensity = 0.25f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.03f
     );
 
     companion object {
