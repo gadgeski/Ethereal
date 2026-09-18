@@ -43,19 +43,27 @@ Ethereal/
 │       │       │   ├── bg_azure_fracture.webp
 │       │       │   ├── bg_azure_sky.webp
 │       │       │   ├── bg_balcony_night.webp
+│       │       │   ├── bg_canyon_sky.webp
 │       │       │   ├── bg_chill_aquarium.webp
+│       │       │   ├── bg_coastal_dusk.webp
 │       │       │   ├── bg_cobalt_paint.webp
+│       │       │   ├── bg_condensation.webp
 │       │       │   ├── bg_crossroad_dusk.webp
 │       │       │   ├── bg_distant_lights.webp
+│       │       │   ├── bg_fog_valley.webp
 │       │       │   ├── bg_halftone_curve.webp
 │       │       │   ├── bg_hillside_view.webp
 │       │       │   ├── bg_indigo_grain.webp
 │       │       │   ├── bg_last_train.webp
+│       │       │   ├── bg_light_leak.webp
 │       │       │   ├── bg_lone_lamp.webp
 │       │       │   ├── bg_mint_wave.webp
 │       │       │   ├── bg_mono_fracture.webp
 │       │       │   ├── bg_quiet_street.webp
 │       │       │   ├── bg_rainy_window.webp
+│       │       │   ├── bg_seaside_shelter.webp
+│       │       │   ├── bg_station_below.webp
+│       │       │   ├── bg_tatami_room.webp
 │       │       │   ├── bg_window_vigil.webp
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
@@ -121,5 +129,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 84 files
+37 directories, 92 files
 ```
