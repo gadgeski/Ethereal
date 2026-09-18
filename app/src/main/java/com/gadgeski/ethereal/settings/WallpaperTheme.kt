@@ -240,6 +240,36 @@ enum class WallpaperTheme(
         glitchIntensity = 0.25f,
         particleDensity = 0.15f,
         scanlineStrength = 0.03f
+    ),
+
+    TATAMI_ROOM(
+        displayName = "Tatami Room",
+        description = "Afternoon light through shoji, a table set for tea.",
+        backgroundDrawableRes = R.drawable.bg_tatami_room,
+        thumbnailDrawableRes = R.drawable.bg_tatami_room,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    SEASIDE_SHELTER(
+        displayName = "Seaside Shelter",
+        description = "A bag left on a bench, facing the open sea.",
+        backgroundDrawableRes = R.drawable.bg_seaside_shelter,
+        thumbnailDrawableRes = R.drawable.bg_seaside_shelter,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
+    ),
+
+    COASTAL_DUSK(
+        displayName = "Coastal Dusk",
+        description = "A seaside platform at sunset, rails curving out of sight.",
+        backgroundDrawableRes = R.drawable.bg_coastal_dusk,
+        thumbnailDrawableRes = R.drawable.bg_coastal_dusk,
+        glitchIntensity = 0.25f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.03f
     );
 
     companion object {
