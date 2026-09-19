@@ -270,6 +270,36 @@ enum class WallpaperTheme(
         glitchIntensity = 0.25f,
         particleDensity = 0.2f,
         scanlineStrength = 0.03f
+    ),
+
+    PORCH_SUNSET(
+        displayName = "Porch Sunset",
+        description = "A mug left on the rail as the bay turns orange.",
+        backgroundDrawableRes = R.drawable.bg_porch_sunset,
+        thumbnailDrawableRes = R.drawable.bg_porch_sunset,
+        glitchIntensity = 0.25f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.03f
+    ),
+
+    GOLDEN_FIELD(
+        displayName = "Golden Field",
+        description = "Tall grass catching the last of the sun.",
+        backgroundDrawableRes = R.drawable.bg_golden_field,
+        thumbnailDrawableRes = R.drawable.bg_golden_field,
+        glitchIntensity = 0.25f,
+        particleDensity = 0.25f,
+        scanlineStrength = 0.03f
+    ),
+
+    HARBOR_WINDOW(
+        displayName = "Harbor Window",
+        description = "An open shutter over a bay at golden hour.",
+        backgroundDrawableRes = R.drawable.bg_harbor_window,
+        thumbnailDrawableRes = R.drawable.bg_harbor_window,
+        glitchIntensity = 0.25f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.03f
     );
 
     companion object {
