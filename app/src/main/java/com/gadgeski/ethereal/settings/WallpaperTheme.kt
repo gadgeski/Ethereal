@@ -300,6 +300,16 @@ enum class WallpaperTheme(
         glitchIntensity = 0.25f,
         particleDensity = 0.2f,
         scanlineStrength = 0.03f
+    ),
+
+    WET_LANE(
+        displayName = "Wet Lane",
+        description = "A narrow lane still wet, catching the last sun.",
+        backgroundDrawableRes = R.drawable.bg_wet_lane,
+        thumbnailDrawableRes = R.drawable.bg_wet_lane_thumb,
+        glitchIntensity = 0.25f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.03f
     );
 
     companion object {
