@@ -51,7 +51,9 @@ Ethereal/
 │       │       │   ├── bg_crossroad_dusk.webp
 │       │       │   ├── bg_distant_lights.webp
 │       │       │   ├── bg_fog_valley.webp
+│       │       │   ├── bg_golden_field.webp
 │       │       │   ├── bg_halftone_curve.webp
+│       │       │   ├── bg_harbor_window.webp
 │       │       │   ├── bg_hillside_view.webp
 │       │       │   ├── bg_indigo_grain.webp
 │       │       │   ├── bg_last_train.webp
@@ -59,11 +61,14 @@ Ethereal/
 │       │       │   ├── bg_lone_lamp.webp
 │       │       │   ├── bg_mint_wave.webp
 │       │       │   ├── bg_mono_fracture.webp
+│       │       │   ├── bg_porch_sunset.webp
 │       │       │   ├── bg_quiet_street.webp
 │       │       │   ├── bg_rainy_window.webp
 │       │       │   ├── bg_seaside_shelter.webp
 │       │       │   ├── bg_station_below.webp
 │       │       │   ├── bg_tatami_room.webp
+│       │       │   ├── bg_wet_lane.webp
+│       │       │   ├── bg_wet_lane_thumb.webp
 │       │       │   ├── bg_window_vigil.webp
 │       │       │   ├── ic_launcher_background.xml
 │       │       │   └── ic_launcher_foreground.xml
@@ -129,5 +134,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 92 files
+37 directories, 97 files
 ```
