@@ -16,7 +16,7 @@ enum class WallpaperTheme(
         displayName = "Azure Sky",
         description = "A fantastical sky of towering clouds and blue light.",
         backgroundDrawableRes = R.drawable.bg_azure_sky,
-        thumbnailDrawableRes = R.drawable.bg_azure_sky,
+        thumbnailDrawableRes = R.drawable.bg_azure_sky_thumb,
         glitchIntensity = 0.6f,
         particleDensity = 0.4f,
         scanlineStrength = 0.04f
@@ -166,7 +166,7 @@ enum class WallpaperTheme(
         displayName = "Balcony Night",
         description = "String lights on a balcony, facing the neighbors' roofs.",
         backgroundDrawableRes = R.drawable.bg_balcony_night,
-        thumbnailDrawableRes = R.drawable.bg_balcony_night,
+        thumbnailDrawableRes = R.drawable.bg_balcony_night_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -186,7 +186,7 @@ enum class WallpaperTheme(
         displayName = "After Rain",
         description = "A wet path holding what little light is left.",
         backgroundDrawableRes = R.drawable.bg_after_rain,
-        thumbnailDrawableRes = R.drawable.bg_after_rain,
+        thumbnailDrawableRes = R.drawable.bg_after_rain_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
