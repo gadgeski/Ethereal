@@ -96,7 +96,7 @@ enum class WallpaperTheme(
         displayName = "Azure Fracture",
         description = "An open sky fractured into stepped blocks of blue.",
         backgroundDrawableRes = R.drawable.bg_azure_fracture,
-        thumbnailDrawableRes = R.drawable.bg_azure_fracture,
+        thumbnailDrawableRes = R.drawable.bg_azure_fracture_thumb,
         glitchIntensity = 0.35f,
         particleDensity = 0.2f,
         scanlineStrength = 0.01f
@@ -196,7 +196,7 @@ enum class WallpaperTheme(
         displayName = "Canyon Sky",
         description = "A strip of sky between towers.",
         backgroundDrawableRes = R.drawable.bg_canyon_sky,
-        thumbnailDrawableRes = R.drawable.bg_canyon_sky,
+        thumbnailDrawableRes = R.drawable.bg_canyon_sky_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
