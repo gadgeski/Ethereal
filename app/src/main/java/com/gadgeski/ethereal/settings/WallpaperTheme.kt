@@ -46,7 +46,7 @@ enum class WallpaperTheme(
         displayName = "Indigo Grain",
         description = "Organic wood grain flowing in deep indigo.",
         backgroundDrawableRes = R.drawable.bg_indigo_grain,
-        thumbnailDrawableRes = R.drawable.bg_indigo_grain,
+        thumbnailDrawableRes = R.drawable.bg_indigo_grain_thumb,
         glitchIntensity = 0.5f,
         particleDensity = 0.4f,
         scanlineStrength = 0.05f
@@ -156,7 +156,7 @@ enum class WallpaperTheme(
         displayName = "Hillside View",
         description = "The valley spread out below a hillside stairway.",
         backgroundDrawableRes = R.drawable.bg_hillside_view,
-        thumbnailDrawableRes = R.drawable.bg_hillside_view,
+        thumbnailDrawableRes = R.drawable.bg_hillside_view_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -176,7 +176,7 @@ enum class WallpaperTheme(
         displayName = "Last Train",
         description = "Hillside houses passing by the window of a night train.",
         backgroundDrawableRes = R.drawable.bg_last_train,
-        thumbnailDrawableRes = R.drawable.bg_last_train,
+        thumbnailDrawableRes = R.drawable.bg_last_train_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
