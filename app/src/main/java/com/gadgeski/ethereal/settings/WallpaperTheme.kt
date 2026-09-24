@@ -36,7 +36,7 @@ enum class WallpaperTheme(
         displayName = "Chill Aquarium",
         description = "Deep blue waters glowing behind curved glass.",
         backgroundDrawableRes = R.drawable.bg_chill_aquarium,
-        thumbnailDrawableRes = R.drawable.bg_chill_aquarium,
+        thumbnailDrawableRes = R.drawable.bg_chill_aquarium_thumb,
         glitchIntensity = 0.3f,
         particleDensity = 0.3f,
         scanlineStrength = 0.03f
@@ -226,7 +226,7 @@ enum class WallpaperTheme(
         displayName = "Condensation",
         description = "City lights dissolving behind a fogged pane.",
         backgroundDrawableRes = R.drawable.bg_condensation,
-        thumbnailDrawableRes = R.drawable.bg_condensation,
+        thumbnailDrawableRes = R.drawable.bg_condensation_thumb,
         glitchIntensity = 0.15f,
         particleDensity = 0.2f,
         scanlineStrength = 0.02f
@@ -266,7 +266,7 @@ enum class WallpaperTheme(
         displayName = "Coastal Dusk",
         description = "A seaside platform at sunset, rails curving out of sight.",
         backgroundDrawableRes = R.drawable.bg_coastal_dusk,
-        thumbnailDrawableRes = R.drawable.bg_coastal_dusk,
+        thumbnailDrawableRes = R.drawable.bg_coastal_dusk_thumb,
         glitchIntensity = 0.25f,
         particleDensity = 0.2f,
         scanlineStrength = 0.03f
