@@ -66,7 +66,7 @@ enum class WallpaperTheme(
         displayName = "Halftone Curve",
         description = "Vivid halftone dots sweeping through blue curves.",
         backgroundDrawableRes = R.drawable.bg_halftone_curve,
-        thumbnailDrawableRes = R.drawable.bg_halftone_curve,
+        thumbnailDrawableRes = R.drawable.bg_halftone_curve_thumb,
         glitchIntensity = 0.75f,
         particleDensity = 0.5f,
         scanlineStrength = 0.06f
@@ -286,7 +286,7 @@ enum class WallpaperTheme(
         displayName = "Golden Field",
         description = "Tall grass catching the last of the sun.",
         backgroundDrawableRes = R.drawable.bg_golden_field,
-        thumbnailDrawableRes = R.drawable.bg_golden_field,
+        thumbnailDrawableRes = R.drawable.bg_golden_field_thumb,
         glitchIntensity = 0.25f,
         particleDensity = 0.25f,
         scanlineStrength = 0.03f
@@ -296,7 +296,7 @@ enum class WallpaperTheme(
         displayName = "Harbor Window",
         description = "An open shutter over a bay at golden hour.",
         backgroundDrawableRes = R.drawable.bg_harbor_window,
-        thumbnailDrawableRes = R.drawable.bg_harbor_window,
+        thumbnailDrawableRes = R.drawable.bg_harbor_window_thumb,
         glitchIntensity = 0.25f,
         particleDensity = 0.2f,
         scanlineStrength = 0.03f
