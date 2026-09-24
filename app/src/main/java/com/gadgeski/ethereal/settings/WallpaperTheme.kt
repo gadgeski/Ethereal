@@ -76,7 +76,7 @@ enum class WallpaperTheme(
         displayName = "Mint Wave",
         description = "Soft mint curves drifting over a midnight field.",
         backgroundDrawableRes = R.drawable.bg_mint_wave,
-        thumbnailDrawableRes = R.drawable.bg_mint_wave,
+        thumbnailDrawableRes = R.drawable.bg_mint_wave_thumb,
         glitchIntensity = 0.3f,
         particleDensity = 0.3f,
         scanlineStrength = 0.02f
@@ -136,7 +136,7 @@ enum class WallpaperTheme(
         displayName = "Lone Lamp",
         description = "A single street lamp holding back the dark.",
         backgroundDrawableRes = R.drawable.bg_lone_lamp,
-        thumbnailDrawableRes = R.drawable.bg_lone_lamp,
+        thumbnailDrawableRes = R.drawable.bg_lone_lamp_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -236,7 +236,7 @@ enum class WallpaperTheme(
         displayName = "Light Leak",
         description = "An alley of fire escapes, burned by stray film light.",
         backgroundDrawableRes = R.drawable.bg_light_leak,
-        thumbnailDrawableRes = R.drawable.bg_light_leak,
+        thumbnailDrawableRes = R.drawable.bg_light_leak_thumb,
         glitchIntensity = 0.25f,
         particleDensity = 0.15f,
         scanlineStrength = 0.03f
