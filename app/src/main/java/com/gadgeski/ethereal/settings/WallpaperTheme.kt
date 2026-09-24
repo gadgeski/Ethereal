@@ -116,7 +116,7 @@ enum class WallpaperTheme(
         displayName = "Distant Lights",
         description = "A town seen from above, long after sunset.",
         backgroundDrawableRes = R.drawable.bg_distant_lights,
-        thumbnailDrawableRes = R.drawable.bg_distant_lights,
+        thumbnailDrawableRes = R.drawable.bg_distant_lights_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -146,7 +146,7 @@ enum class WallpaperTheme(
         displayName = "Crossroad Dusk",
         description = "An empty intersection under a single lamp.",
         backgroundDrawableRes = R.drawable.bg_crossroad_dusk,
-        thumbnailDrawableRes = R.drawable.bg_crossroad_dusk,
+        thumbnailDrawableRes = R.drawable.bg_crossroad_dusk_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -206,7 +206,7 @@ enum class WallpaperTheme(
         displayName = "Fog Valley",
         description = "Fog settling between ridges of pine.",
         backgroundDrawableRes = R.drawable.bg_fog_valley,
-        thumbnailDrawableRes = R.drawable.bg_fog_valley,
+        thumbnailDrawableRes = R.drawable.bg_fog_valley_thumb,
         glitchIntensity = 0.15f,
         particleDensity = 0.2f,
         scanlineStrength = 0.02f
