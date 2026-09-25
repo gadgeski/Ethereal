@@ -56,7 +56,7 @@ enum class WallpaperTheme(
         displayName = "Cobalt Paint",
         description = "Cobalt strokes splashed across a dark canvas.",
         backgroundDrawableRes = R.drawable.bg_cobalt_paint,
-        thumbnailDrawableRes = R.drawable.bg_cobalt_paint,
+        thumbnailDrawableRes = R.drawable.bg_cobalt_paint_thumb,
         glitchIntensity = 0.5f,
         particleDensity = 0.6f,
         scanlineStrength = 0.03f
@@ -86,7 +86,7 @@ enum class WallpaperTheme(
         displayName = "Mono Fracture",
         description = "A quiet room fractured into stepped monochrome blocks.",
         backgroundDrawableRes = R.drawable.bg_mono_fracture,
-        thumbnailDrawableRes = R.drawable.bg_mono_fracture,
+        thumbnailDrawableRes = R.drawable.bg_mono_fracture_thumb,
         glitchIntensity = 0.35f,
         particleDensity = 0.2f,
         scanlineStrength = 0.01f
@@ -106,7 +106,7 @@ enum class WallpaperTheme(
         displayName = "Quiet Street",
         description = "A residential street after dark, lit only by a few windows.",
         backgroundDrawableRes = R.drawable.bg_quiet_street,
-        thumbnailDrawableRes = R.drawable.bg_quiet_street,
+        thumbnailDrawableRes = R.drawable.bg_quiet_street_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
