@@ -126,7 +126,7 @@ enum class WallpaperTheme(
         displayName = "Window Vigil",
         description = "The town after dark, seen through a window frame.",
         backgroundDrawableRes = R.drawable.bg_window_vigil,
-        thumbnailDrawableRes = R.drawable.bg_window_vigil,
+        thumbnailDrawableRes = R.drawable.bg_window_vigil_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -216,7 +216,7 @@ enum class WallpaperTheme(
         displayName = "Station Below",
         description = "Rails curving through a town, seen from the hill above.",
         backgroundDrawableRes = R.drawable.bg_station_below,
-        thumbnailDrawableRes = R.drawable.bg_station_below,
+        thumbnailDrawableRes = R.drawable.bg_station_below_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -246,7 +246,7 @@ enum class WallpaperTheme(
         displayName = "Tatami Room",
         description = "Afternoon light through shoji, a table set for tea.",
         backgroundDrawableRes = R.drawable.bg_tatami_room,
-        thumbnailDrawableRes = R.drawable.bg_tatami_room,
+        thumbnailDrawableRes = R.drawable.bg_tatami_room_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
