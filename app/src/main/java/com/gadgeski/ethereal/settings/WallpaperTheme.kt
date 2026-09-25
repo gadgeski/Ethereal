@@ -26,7 +26,7 @@ enum class WallpaperTheme(
         displayName = "Rainy Window",
         description = "A doodle left on a fogged window on a rainy day.",
         backgroundDrawableRes = R.drawable.bg_rainy_window,
-        thumbnailDrawableRes = R.drawable.bg_rainy_window,
+        thumbnailDrawableRes = R.drawable.bg_rainy_window_thumb,
         glitchIntensity = 0.4f,
         particleDensity = 0.3f,
         scanlineStrength = 0.02f
@@ -256,7 +256,7 @@ enum class WallpaperTheme(
         displayName = "Seaside Shelter",
         description = "A bag left on a bench, facing the open sea.",
         backgroundDrawableRes = R.drawable.bg_seaside_shelter,
-        thumbnailDrawableRes = R.drawable.bg_seaside_shelter,
+        thumbnailDrawableRes = R.drawable.bg_seaside_shelter_thumb,
         glitchIntensity = 0.2f,
         particleDensity = 0.15f,
         scanlineStrength = 0.02f
@@ -276,7 +276,7 @@ enum class WallpaperTheme(
         displayName = "Porch Sunset",
         description = "A mug left on the rail as the bay turns orange.",
         backgroundDrawableRes = R.drawable.bg_porch_sunset,
-        thumbnailDrawableRes = R.drawable.bg_porch_sunset,
+        thumbnailDrawableRes = R.drawable.bg_porch_sunset_thumb,
         glitchIntensity = 0.25f,
         particleDensity = 0.2f,
         scanlineStrength = 0.03f
