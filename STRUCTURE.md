@@ -91,6 +91,8 @@ Ethereal/
 │       │       │   ├── bg_rainy_window_thumb.webp
 │       │       │   ├── bg_seaside_shelter.webp
 │       │       │   ├── bg_seaside_shelter_thumb.webp
+│       │       │   ├── bg_signal_dusk.webp
+│       │       │   ├── bg_signal_dusk_thumb.webp
 │       │       │   ├── bg_station_below.webp
 │       │       │   ├── bg_station_below_thumb.webp
 │       │       │   ├── bg_tatami_room.webp
@@ -163,5 +165,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 126 files
+37 directories, 128 files
 ```
