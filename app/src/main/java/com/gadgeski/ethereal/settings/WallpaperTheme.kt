@@ -310,6 +310,16 @@ enum class WallpaperTheme(
         glitchIntensity = 0.25f,
         particleDensity = 0.2f,
         scanlineStrength = 0.03f
+    ),
+
+    SIGNAL_DUSK(
+    displayName = "Signal Dusk",
+    description = "A skyline at sundown, broken by a corrupted band.",
+    backgroundDrawableRes = R.drawable.bg_signal_dusk,
+    thumbnailDrawableRes = R.drawable.bg_signal_dusk_thumb,
+    glitchIntensity = 0.3f,
+    particleDensity = 0.2f,
+    scanlineStrength = 0.03f
     );
 
     companion object {
