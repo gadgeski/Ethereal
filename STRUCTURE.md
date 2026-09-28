@@ -47,6 +47,8 @@ Ethereal/
 │       │       │   ├── bg_azure_sky_thumb.webp
 │       │       │   ├── bg_balcony_night.webp
 │       │       │   ├── bg_balcony_night_thumb.webp
+│       │       │   ├── bg_blurred_canyon.webp
+│       │       │   ├── bg_blurred_canyon_thumb.webp
 │       │       │   ├── bg_canyon_sky.webp
 │       │       │   ├── bg_canyon_sky_thumb.webp
 │       │       │   ├── bg_chill_aquarium.webp
@@ -165,5 +167,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 128 files
+37 directories, 130 files
 ```
