@@ -320,6 +320,16 @@ enum class WallpaperTheme(
     glitchIntensity = 0.3f,
     particleDensity = 0.2f,
     scanlineStrength = 0.03f
+    ),
+
+    BLURRED_CANYON(
+        displayName = "Blurred Canyon",
+        description = "Sunlight down a street, smeared into streaks.",
+        backgroundDrawableRes = R.drawable.bg_blurred_canyon,
+        thumbnailDrawableRes = R.drawable.bg_blurred_canyon_thumb,
+        glitchIntensity = 0.2f,
+        particleDensity = 0.2f,
+        scanlineStrength = 0.02f
     );
 
     companion object {
