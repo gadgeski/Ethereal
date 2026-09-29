@@ -336,5 +336,10 @@ enum class WallpaperTheme(
         fun fromName(name: String?): WallpaperTheme {
             return entries.firstOrNull { it.name == name } ?: AZURE_SKY
         }
-    }
-}
+
+        /** 現在のテーマ以外からランダムに1つ選ぶ */
+        fun randomExcluding(current: WallpaperTheme): WallpaperTheme {
+            val candidates = entries.filter { it != current }
+            return if (candidates.isEmpty()) current else candidates.random()
+        }
+    }}

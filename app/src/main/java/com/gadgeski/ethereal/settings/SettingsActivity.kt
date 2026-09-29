@@ -26,6 +26,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -51,6 +52,8 @@ class SettingsActivity : ComponentActivity() {
     companion object {
         const val PREFS_NAME = "ethereal_prefs"
         const val KEY_SELECTED_THEME = "selected_theme"
+        const val KEY_SHUFFLE_ENABLED = "shuffle_enabled"
+        const val KEY_LAST_SHUFFLE_DAY = "last_shuffle_day"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,14 +64,21 @@ class SettingsActivity : ComponentActivity() {
         val initialTheme = WallpaperTheme.fromName(
             prefs.getString(KEY_SELECTED_THEME, WallpaperTheme.AZURE_SKY.name)
         )
+        val initialShuffle = prefs.getBoolean(KEY_SHUFFLE_ENABLED, false)
 
         setContent {
             EtherealTheme {
                 SettingsScreen(
                     initialTheme = initialTheme,
+                    initialShuffle = initialShuffle,
                     onThemeSelected = { theme ->
                         prefs.edit {
                             putString(KEY_SELECTED_THEME, theme.name)
+                        }
+                    },
+                    onShuffleChanged = { enabled ->
+                        prefs.edit {
+                            putBoolean(KEY_SHUFFLE_ENABLED, enabled)
                         }
                     },
                     onClose = { finish() }
@@ -82,10 +92,13 @@ class SettingsActivity : ComponentActivity() {
 @Composable
 private fun SettingsScreen(
     initialTheme: WallpaperTheme,
+    initialShuffle: Boolean,
     onThemeSelected: (WallpaperTheme) -> Unit,
+    onShuffleChanged: (Boolean) -> Unit,
     onClose: () -> Unit
 ) {
     var selectedTheme by remember { mutableStateOf(initialTheme) }
+    var shuffleEnabled by remember { mutableStateOf(initialShuffle) }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -128,6 +141,38 @@ private fun SettingsScreen(
                 )
             }
 
+            item {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Daily shuffle",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = "Pick a different theme each day, automatically.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+
+                        Switch(
+                            checked = shuffleEnabled,
+                            onCheckedChange = { enabled ->
+                                shuffleEnabled = enabled
+                                onShuffleChanged(enabled)
+                            }
+                        )
+                    }
+                }
+            }
+
             items(
                 items = WallpaperTheme.entries,
                 key = { it.name }
@@ -140,6 +185,11 @@ private fun SettingsScreen(
                             if (selectedTheme != theme) {
                                 selectedTheme = theme
                                 onThemeSelected(theme)
+
+                                if (shuffleEnabled) {
+                                    shuffleEnabled = false
+                                    onShuffleChanged(false)
+                                }
 
                                 scope.launch {
                                     snackbarHostState.showSnackbar(

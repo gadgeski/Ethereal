@@ -29,6 +29,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import java.time.LocalDate
+import androidx.core.content.edit
 
 class EtherealWallpaperService : WallpaperService() {
 
@@ -153,6 +155,8 @@ class EtherealWallpaperService : WallpaperService() {
             engineVisible = visible
 
             if (visible) {
+                applyDailyShuffleIfNeeded()
+
                 sensorManager?.registerListener(
                     this,
                     accelerometer,
@@ -225,6 +229,27 @@ class EtherealWallpaperService : WallpaperService() {
         }
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+        /** シャッフルが有効で、かつ日付が変わっていれば別テーマに切り替える */
+        private fun applyDailyShuffleIfNeeded() {
+            if (!prefs.getBoolean(SettingsActivity.KEY_SHUFFLE_ENABLED, false)) return
+
+            val today = LocalDate.now().toEpochDay()
+            if (prefs.getLong(SettingsActivity.KEY_LAST_SHUFFLE_DAY, -1L) == today) return
+
+            val current = WallpaperTheme.fromName(
+                prefs.getString(
+                    SettingsActivity.KEY_SELECTED_THEME,
+                    WallpaperTheme.AZURE_SKY.name
+                )
+            )
+            val next = WallpaperTheme.randomExcluding(current)
+
+            prefs.edit {
+                putString(SettingsActivity.KEY_SELECTED_THEME, next.name)
+                putLong(SettingsActivity.KEY_LAST_SHUFFLE_DAY, today)
+            }
+        }
 
         private fun startDrawingLoop() {
             if (drawJob?.isActive == true) return
