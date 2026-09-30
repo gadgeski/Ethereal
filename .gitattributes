@@ -1,0 +1,14 @@
+* text=auto
+
+*.webp binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.jar binary
+*.so binary
+*.keystore binary
+*.jks binary
+
+gradlew text eol=lf
+*.bat text eol=crlf
