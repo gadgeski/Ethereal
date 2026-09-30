@@ -330,6 +330,16 @@ enum class WallpaperTheme(
         glitchIntensity = 0.2f,
         particleDensity = 0.2f,
         scanlineStrength = 0.02f
+    ),
+
+    DECAY_ALLEY(
+        displayName = "Decay Alley",
+        description = "An alley at dusk, breaking apart as it plays back.",
+        backgroundDrawableRes = R.drawable.bg_decay_alley,
+        thumbnailDrawableRes = R.drawable.bg_decay_alley_thumb,
+        glitchIntensity = 0.15f,
+        particleDensity = 0.15f,
+        scanlineStrength = 0.02f
     );
 
     companion object {
