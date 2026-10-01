@@ -61,6 +61,8 @@ Ethereal/
 │       │       │   ├── bg_condensation_thumb.webp
 │       │       │   ├── bg_crossroad_dusk.webp
 │       │       │   ├── bg_crossroad_dusk_thumb.webp
+│       │       │   ├── bg_decay_alley.webp
+│       │       │   ├── bg_decay_alley_thumb.webp
 │       │       │   ├── bg_distant_lights.webp
 │       │       │   ├── bg_distant_lights_thumb.webp
 │       │       │   ├── bg_fog_valley.webp
@@ -167,5 +169,5 @@ Ethereal/
 ├── local.properties
 └── settings.gradle.kts
 
-37 directories, 130 files
+37 directories, 132 files
 ```
